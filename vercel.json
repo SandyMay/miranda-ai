@@ -1,5 +1,0 @@
-{
-  "rewrites": [
-    { "source": "/api/miranda", "destination": "/api/miranda" }
-  ]
-}
