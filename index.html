@@ -200,11 +200,6 @@
     background: var(--rule);
   }
 
-  .input-icon-btn.recording {
-    color: #C41E3A;
-    background: rgba(196, 30, 58, 0.08);
-  }
-
   .submit-inside-btn {
     font-family: 'DM Mono', monospace;
     font-size: 11px;
@@ -570,6 +565,7 @@ OFF-TOPIC: "I wasn\'t aware I\'d been confused for someone who cares about anyth
 IMAGE ANALYSIS: When you see a photo, look at the actual outfit. Identify the specific clothing items, colors, and details. Then roast the most obvious thing you see. Be specific — name the garment and color. If you can\'t see the outfit clearly: "The lighting in this photograph is as questionable as I suspect the outfit underneath it is. Try again. I\'m not a detective."`;
 
 let imageBase64 = null;
+let imageMediaType = 'image/jpeg';
 let submissionCount = 0;
 let currentResponse = '';
 let visitCount = 0;
@@ -598,64 +594,10 @@ function showScreen(name) {
   }
 }
 
-let recognition = null;
-let isRecording = false;
-
-function toggleMic() {
-  if (isRecording) {
-    stopMic();
-    return;
-  }
-
-  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-  if (!SpeechRecognition) {
-    alert('Speech recognition is not supported in this browser. Try Chrome or Safari.');
-    return;
-  }
-
-  recognition = new SpeechRecognition();
-  recognition.continuous = true;
-  recognition.interimResults = true;
-  recognition.lang = 'en-US';
-
-  const textarea = document.getElementById('user-input');
-  const existingText = textarea.value;
-
-  recognition.onresult = (event) => {
-    let transcript = '';
-    for (let i = event.resultIndex; i < event.results.length; i++) {
-      transcript += event.results[i][0].transcript;
-    }
-    textarea.value = existingText + (existingText ? ' ' : '') + transcript;
-    updateSubmitState();
-  };
-
-  recognition.onerror = (event) => {
-    console.error('Speech error:', event.error);
-    stopMic();
-  };
-
-  recognition.onend = () => {
-    stopMic();
-  };
-
-  recognition.start();
-  isRecording = true;
-  document.getElementById('mic-btn').classList.add('recording');
-}
-
-function stopMic() {
-  if (recognition) {
-    recognition.stop();
-    recognition = null;
-  }
-  isRecording = false;
-  document.getElementById('mic-btn').classList.remove('recording');
-}
-
 function handleImage(input) {
   const file = input.files[0];
   if (!file) return;
+  imageMediaType = file.type || 'image/jpeg';
   const reader = new FileReader();
   reader.onload = (e) => {
     imageBase64 = e.target.result.split(',')[1];
@@ -728,7 +670,7 @@ async function handleSubmit() {
   if (imageBase64) {
     userContent.push({
       type: "image",
-      source: { type: "base64", media_type: "image/jpeg", data: imageBase64 }
+      source: { type: "base64", media_type: imageMediaType, data: imageBase64 }
     });
   }
 
@@ -755,7 +697,7 @@ async function handleSubmit() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           model: "claude-sonnet-4-20250514",
-          max_tokens: 150,
+          max_tokens: 250,
           system: SYSTEM_PROMPT,
           messages: [{ role: "user", content: userContent }]
         })
