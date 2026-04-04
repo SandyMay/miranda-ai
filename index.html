@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Miranda</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=DM+Mono:wght@300;400;500&family=Mrs+Saint+Delafield&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 <style>
   :root {
     --paper: #F5F2EE;
@@ -544,7 +543,7 @@
       <!-- Social share icons -->
       <div style="display:flex;justify-content:center;gap:14px;margin-bottom:24px">
         <!-- Instagram -->
-        <button class="social-btn" onclick="handleShareSocial('instagram')" title="Instagram">
+        <button id="btn-instagram" class="social-btn" onclick="handleShareSocial('instagram')" title="Instagram">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <rect x="2" y="2" width="20" height="20" rx="5"/>
             <circle cx="12" cy="12" r="5"/>
@@ -552,7 +551,7 @@
           </svg>
         </button>
         <!-- TikTok -->
-        <button class="social-btn" onclick="handleShareSocial('tiktok')" title="TikTok">
+        <button id="btn-tiktok" class="social-btn" onclick="handleShareSocial('tiktok')" title="TikTok">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="none">
             <path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1v-3.5a6.37 6.37 0 00-.79-.05A6.34 6.34 0 003.15 15.2a6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.34-6.34V8.73a8.19 8.19 0 004.76 1.52V6.8a4.84 4.84 0 01-1-.11z"/>
           </svg>
@@ -828,96 +827,167 @@ function handleShare() {
   showCopyPopup();
 }
 
+function wrapText(ctx, text, maxWidth) {
+  const words = text.split(' ');
+  const lines = [];
+  let current = '';
+  for (const word of words) {
+    const test = current ? current + ' ' + word : word;
+    if (ctx.measureText(test).width > maxWidth && current) {
+      lines.push(current);
+      current = word;
+    } else {
+      current = test;
+    }
+  }
+  if (current) lines.push(current);
+  return lines;
+}
+
 async function generateVerdictImage() {
   await document.fonts.ready;
 
-  const card = document.createElement('div');
-  card.style.cssText = [
-    'position:fixed', 'top:-9999px', 'left:-9999px',
-    'width:480px', 'min-height:600px',
-    'background:#F5F2EE',
-    'display:flex', 'flex-direction:column',
-    'align-items:center', 'justify-content:center',
-    'padding:72px 56px 56px',
-    'box-sizing:border-box',
-    'font-family:"Cormorant Garamond",serif',
-  ].join(';');
+  const w = 480, scale = 2;
+  const pad = 56;
+  const textMaxW = w - pad * 2;
 
-  card.innerHTML = `
-    <p style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.4em;text-transform:uppercase;color:#A8A4A0;margin-bottom:10px;text-align:center">The verdict</p>
-    <div style="width:40px;height:1.5px;background:#1A1A1A;margin:0 auto 32px"></div>
-    <p style="font-size:22px;line-height:1.85;font-style:italic;font-weight:400;text-align:center;color:#1A1A1A;margin-bottom:40px">\u201C${currentResponse}\u201D</p>
-    <p style="font-family:'Mrs Saint Delafield',cursive;font-size:52px;color:#1A1A1A;text-align:center;margin-bottom:44px;font-weight:400">Miranda</p>
-    <div style="height:0.5px;background:#DDD9D4;width:100%;margin-bottom:18px"></div>
-    <p style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.18em;color:#A8A4A0;text-align:center;text-transform:uppercase">mirandaaiapp.com</p>
-  `;
+  // Measure text height first so canvas height fits content
+  const measureCanvas = document.createElement('canvas');
+  const mCtx = measureCanvas.getContext('2d');
+  mCtx.font = 'italic 400 21px "Cormorant Garamond"';
+  const verdictLines = wrapText(mCtx, '\u201C' + currentResponse + '\u201D', textMaxW);
+  const textBlockH = verdictLines.length * 37;
 
-  document.body.appendChild(card);
+  // Layout constants
+  const labelY    = pad + 10;
+  const ruleY     = pad + 28;
+  const textStartY = ruleY + 42;
+  const sigY      = textStartY + textBlockH + 32;
+  const dividerY  = sigY + 56;
+  const urlY      = dividerY + 22;
+  const h         = urlY + pad;
 
-  const canvas = await html2canvas(card, {
-    scale: 2,
-    useCORS: true,
-    backgroundColor: '#F5F2EE',
-    logging: false,
+  const canvas = document.createElement('canvas');
+  canvas.width  = w * scale;
+  canvas.height = h * scale;
+  const ctx = canvas.getContext('2d');
+  ctx.scale(scale, scale);
+
+  // Background
+  ctx.fillStyle = '#F5F2EE';
+  ctx.fillRect(0, 0, w, h);
+
+  ctx.textAlign = 'center';
+
+  // "THE VERDICT" label
+  ctx.fillStyle = '#A8A4A0';
+  ctx.font = '400 9px "DM Mono"';
+  if ('letterSpacing' in ctx) ctx.letterSpacing = '4px';
+  ctx.fillText('THE VERDICT', w / 2, labelY);
+
+  // Short rule
+  if ('letterSpacing' in ctx) ctx.letterSpacing = '0px';
+  ctx.strokeStyle = '#1A1A1A';
+  ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  ctx.moveTo(w / 2 - 20, ruleY);
+  ctx.lineTo(w / 2 + 20, ruleY);
+  ctx.stroke();
+
+  // Verdict text
+  ctx.fillStyle = '#1A1A1A';
+  ctx.font = 'italic 400 21px "Cormorant Garamond"';
+  verdictLines.forEach((line, i) => {
+    ctx.fillText(line, w / 2, textStartY + i * 37);
   });
 
-  document.body.removeChild(card);
+  // Signature
+  ctx.font = '400 52px "Mrs Saint Delafield"';
+  ctx.fillText('Miranda', w / 2, sigY);
+
+  // Divider
+  ctx.strokeStyle = '#DDD9D4';
+  ctx.lineWidth = 0.5;
+  ctx.beginPath();
+  ctx.moveTo(pad, dividerY);
+  ctx.lineTo(w - pad, dividerY);
+  ctx.stroke();
+
+  // URL
+  ctx.fillStyle = '#A8A4A0';
+  ctx.font = '400 9px "DM Mono"';
+  if ('letterSpacing' in ctx) ctx.letterSpacing = '2px';
+  ctx.fillText('MIRANDAAIAPP.COM', w / 2, urlY);
 
   return new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
 }
 
 async function handleShareSocial(platform) {
-  const btn = document.querySelector(`[onclick="handleShareSocial('${platform}')"]`);
+  const btn = document.querySelector('[onclick="handleShareSocial(\'' + platform + '\')"]');
   if (btn) { btn.style.opacity = '0.4'; btn.style.pointerEvents = 'none'; }
 
   try {
     const blob = await generateVerdictImage();
     const file = new File([blob], 'miranda-verdict.png', { type: 'image/png' });
-
     const caption = 'Miranda says: \u201C' + currentResponse + '\u201D\n\nGet judged \u2192 mirandaaiapp.com';
     const encodedCaption = encodeURIComponent(caption);
 
     if (platform === 'instagram' || platform === 'tiktok') {
-      // Try Web Share API (works on mobile — opens native share sheet → user picks Stories)
+      // On mobile: Web Share API opens native share sheet → user picks Stories
       if (navigator.canShare && navigator.canShare({ files: [file] })) {
-        await navigator.share({ files: [file], title: 'Miranda\u2019s Verdict' });
+        await navigator.share({ files: [file] });
       } else {
-        // Desktop fallback: download the image
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'miranda-verdict.png';
-        a.click();
-        URL.revokeObjectURL(url);
+        // Desktop: download the card image
+        _downloadBlob(blob, 'miranda-verdict.png');
+        showToast('Image saved \u2014 open ' + (platform === 'instagram' ? 'Instagram' : 'TikTok') + ' on your phone to share to Stories');
       }
       return;
     }
 
     if (platform === 'x' || platform === 'threads') {
-      // Mobile: share image + text via Web Share API
+      const intentUrls = {
+        x: 'https://x.com/intent/post?text=' + encodedCaption,
+        threads: 'https://www.threads.net/intent/post?text=' + encodedCaption,
+      };
       if (navigator.canShare && navigator.canShare({ files: [file] })) {
         await navigator.share({ files: [file], text: caption });
       } else {
-        // Desktop: open intent URL with text, also download image
-        const urls = {
-          x: 'https://x.com/intent/post?text=' + encodedCaption,
-          threads: 'https://www.threads.net/intent/post?text=' + encodedCaption,
-        };
-        window.open(urls[platform], '_blank');
-        // Also download the image so they can attach it manually
-        const imgUrl = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = imgUrl;
-        a.download = 'miranda-verdict.png';
-        a.click();
-        URL.revokeObjectURL(imgUrl);
+        window.open(intentUrls[platform], '_blank');
+        _downloadBlob(blob, 'miranda-verdict.png');
       }
     }
   } catch (err) {
-    // User cancelled or share failed — do nothing
+    if (err.name !== 'AbortError') console.error('Share failed:', err);
   } finally {
     if (btn) { btn.style.opacity = ''; btn.style.pointerEvents = ''; }
   }
+}
+
+function _downloadBlob(blob, filename) {
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function showToast(msg) {
+  const existing = document.getElementById('share-toast');
+  if (existing) existing.remove();
+  const toast = document.createElement('div');
+  toast.id = 'share-toast';
+  toast.style.cssText = [
+    'position:fixed', 'bottom:32px', 'left:50%', 'transform:translateX(-50%)',
+    'background:#1A1A1A', 'color:#F5F2EE',
+    'font-family:"DM Mono",monospace', 'font-size:11px', 'letter-spacing:0.06em',
+    'padding:12px 20px', 'border-radius:3px',
+    'white-space:nowrap', 'z-index:300',
+    'animation:fadeUp 0.25s ease both',
+  ].join(';');
+  toast.textContent = msg;
+  document.body.appendChild(toast);
+  setTimeout(() => toast.remove(), 4000);
 }
 
 function handleReset() {
@@ -931,6 +1001,18 @@ function handleReset() {
     showScreen('input');
   }, 300);
 }
+
+// Hide Instagram/TikTok buttons if file sharing isn't supported (desktop)
+(function () {
+  const testFile = new File([''], 't', { type: 'image/png' });
+  const canShare = navigator.canShare && navigator.canShare({ files: [testFile] });
+  if (!canShare) {
+    ['btn-instagram', 'btn-tiktok'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.style.display = 'none';
+    });
+  }
+})();
 
 // Load shared verdict from URL param
 (function () {
