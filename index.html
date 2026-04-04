@@ -421,6 +421,55 @@
   .icon-copy-btn:hover { border-color: var(--ink); }
   .icon-copy-btn:active { transform: scale(0.95); }
   .icon-copy-btn.copied { border-color: var(--ink); background: var(--ink); color: var(--paper); }
+
+  .share-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 15px 0;
+    cursor: pointer;
+    border: none;
+    border-bottom: 0.5px solid var(--rule);
+    background: transparent;
+    width: 100%;
+    text-align: left;
+    color: var(--ink);
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    transition: opacity 0.15s;
+  }
+  .share-row:last-of-type { border-bottom: none; }
+  .share-row:hover { opacity: 0.5; }
+  .share-row:active { transform: scale(0.98); }
+
+  .share-row-icon {
+    width: 32px;
+    height: 32px;
+    border: 1.5px solid var(--rule);
+    border-radius: var(--r);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    color: var(--ink);
+  }
+
+  .popup-verdict-preview {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 16px;
+    font-style: italic;
+    font-weight: 400;
+    line-height: 1.7;
+    color: var(--ink);
+    text-align: center;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    margin-bottom: 10px;
+  }
 </style>
 </head>
 <body>
@@ -542,37 +591,27 @@
 
       <!-- Social share icons -->
       <div style="display:flex;justify-content:center;gap:14px;margin-bottom:24px">
-        <!-- Instagram -->
-        <button id="btn-instagram" class="social-btn" onclick="handleShareSocial('instagram')" title="Instagram">
+        <!-- Share -->
+        <button class="social-btn" onclick="handleShare()" title="Share">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="2" y="2" width="20" height="20" rx="5"/>
-            <circle cx="12" cy="12" r="5"/>
-            <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/>
-          </svg>
-        </button>
-        <!-- TikTok -->
-        <button id="btn-tiktok" class="social-btn" onclick="handleShareSocial('tiktok')" title="TikTok">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="none">
-            <path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1v-3.5a6.37 6.37 0 00-.79-.05A6.34 6.34 0 003.15 15.2a6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.34-6.34V8.73a8.19 8.19 0 004.76 1.52V6.8a4.84 4.84 0 01-1-.11z"/>
-          </svg>
-        </button>
-        <!-- X -->
-        <button class="social-btn" onclick="handleShareSocial('x')" title="X">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none">
-            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
-          </svg>
-        </button>
-        <!-- Threads -->
-        <button class="social-btn" onclick="handleShareSocial('threads')" title="Threads">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" stroke="none">
-            <path d="M12.186 24h-.007c-3.581-.024-6.334-1.205-8.184-3.509C2.35 18.44 1.5 15.586 1.472 12.01v-.017c.03-3.579.879-6.43 2.525-8.482C5.845 1.205 8.6.024 12.18 0h.014c2.746.02 5.043.725 6.826 2.098 1.677 1.29 2.858 3.13 3.509 5.467l-2.773.776c-1.048-3.764-3.674-5.478-7.562-5.502-2.782.02-4.86.876-6.163 2.548-1.225 1.571-1.862 3.896-1.887 6.615.025 2.716.662 5.04 1.887 6.611 1.302 1.672 3.38 2.528 6.163 2.548 2.085-.015 3.692-.453 4.908-1.34 1.38-1.008 2.088-2.51 2.088-4.322 0-1.032-.282-1.852-.838-2.437-.518-.543-1.238-.856-2.12-.925a9.47 9.47 0 01.024 1.807c-.09.879-.396 1.584-.9 2.096-.556.562-1.327.848-2.296.848-1.97 0-3.199-1.122-3.199-2.928 0-1.968 1.497-3.302 3.726-3.302.69 0 1.295.112 1.807.317l-.283-1.77c-.09-.564-.234-1.044-.438-1.424-.427-.795-1.196-1.221-2.288-1.266-1.476.03-2.403.637-2.75 1.802l-2.63-.758c.612-2.124 2.384-3.346 4.999-3.346h.15c1.658.06 2.983.592 3.826 1.572.622.723 1.018 1.634 1.182 2.717l.516 3.222c.28 1.743.28 2.482.28 2.901 0 2.832-1.105 5.064-3.193 6.459-1.787 1.193-4.084 1.81-6.824 1.83z"/>
+            <path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8"/>
+            <polyline points="16 6 12 2 8 6"/>
+            <line x1="12" y1="2" x2="12" y2="15"/>
           </svg>
         </button>
         <!-- Copy link -->
-        <button class="social-btn" id="copy-btn" onclick="handleShare()" title="Copy link">
+        <button class="social-btn" id="copy-btn" onclick="showCopyPopup()" title="Copy link">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <rect x="9" y="9" width="13" height="13" rx="2"/>
             <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
+          </svg>
+        </button>
+        <!-- Download -->
+        <button class="social-btn" onclick="handleDownload()" title="Download">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8"/>
+            <polyline points="16 12 12 16 8 12"/>
+            <line x1="12" y1="2" x2="12" y2="16"/>
           </svg>
         </button>
       </div>
@@ -591,17 +630,58 @@
 <!-- ========== COPY POPUP ========== -->
 <div id="copy-popup" class="copy-popup-overlay" onclick="if(event.target===this)hideCopyPopup()">
   <div class="copy-popup-card">
-    <p class="mono" style="font-size:9px;letter-spacing:0.3em;text-transform:uppercase;color:var(--muted);margin-bottom:20px;text-align:center">Share link</p>
-    <div class="url-row">
+    <p class="mono" style="font-size:9px;letter-spacing:0.3em;text-transform:uppercase;color:var(--muted);margin-bottom:16px;text-align:center">Share link</p>
+    <div style="height:0.5px;background:var(--rule);margin-bottom:24px"></div>
+
+    <!-- Verdict preview -->
+    <p id="copy-verdict-preview" class="popup-verdict-preview"></p>
+    <p style="font-family:'Mrs Saint Delafield',cursive;font-size:28px;color:var(--ink);text-align:center;margin-bottom:24px">Miranda</p>
+    <div style="height:0.5px;background:var(--rule);margin-bottom:20px"></div>
+
+    <!-- URL row -->
+    <div class="url-row" style="margin-bottom:20px">
       <span id="share-url-display" class="url-text"></span>
-      <button class="icon-copy-btn" id="popup-copy-btn" onclick="copyShareLink()" title="Copy link">
+      <button class="icon-copy-btn" id="popup-copy-btn" onclick="copyShareLink()" title="Copy">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <rect x="9" y="9" width="13" height="13" rx="2"/>
           <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
         </svg>
       </button>
     </div>
+
     <button class="btn btn-ghost" onclick="hideCopyPopup()">Close</button>
+  </div>
+</div>
+
+<!-- ========== SHARE MODAL (desktop) ========== -->
+<div id="share-modal" class="copy-popup-overlay" onclick="if(event.target===this)hideShareModal()">
+  <div class="copy-popup-card">
+    <p class="mono" style="font-size:9px;letter-spacing:0.3em;text-transform:uppercase;color:var(--muted);margin-bottom:16px;text-align:center">Share</p>
+    <div style="height:0.5px;background:var(--rule);margin-bottom:8px"></div>
+
+    <!-- X -->
+    <button class="share-row" onclick="shareToX()">
+      <span class="share-row-icon">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+          <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+        </svg>
+      </span>
+      Post on X
+    </button>
+
+    <!-- Threads -->
+    <button class="share-row" onclick="shareToThreads()">
+      <span class="share-row-icon">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+          <path d="M12.186 24h-.007c-3.581-.024-6.334-1.205-8.184-3.509C2.35 18.44 1.5 15.586 1.472 12.01v-.017c.03-3.579.879-6.43 2.525-8.482C5.845 1.205 8.6.024 12.18 0h.014c2.746.02 5.043.725 6.826 2.098 1.677 1.29 2.858 3.13 3.509 5.467l-2.773.776c-1.048-3.764-3.674-5.478-7.562-5.502-2.782.02-4.86.876-6.163 2.548-1.225 1.571-1.862 3.896-1.887 6.615.025 2.716.662 5.04 1.887 6.611 1.302 1.672 3.38 2.528 6.163 2.548 2.085-.015 3.692-.453 4.908-1.34 1.38-1.008 2.088-2.51 2.088-4.322 0-1.032-.282-1.852-.838-2.437-.518-.543-1.238-.856-2.12-.925a9.47 9.47 0 01.024 1.807c-.09.879-.396 1.584-.9 2.096-.556.562-1.327.848-2.296.848-1.97 0-3.199-1.122-3.199-2.928 0-1.968 1.497-3.302 3.726-3.302.69 0 1.295.112 1.807.317l-.283-1.77c-.09-.564-.234-1.044-.438-1.424-.427-.795-1.196-1.221-2.288-1.266-1.476.03-2.403.637-2.75 1.802l-2.63-.758c.612-2.124 2.384-3.346 4.999-3.346h.15c1.658.06 2.983.592 3.826 1.572.622.723 1.018 1.634 1.182 2.717l.516 3.222c.28 1.743.28 2.482.28 2.901 0 2.832-1.105 5.064-3.193 6.459-1.787 1.193-4.084 1.81-6.824 1.83z"/>
+        </svg>
+      </span>
+      Post on Threads
+    </button>
+
+    <div style="margin-top:16px">
+      <button class="btn btn-ghost" onclick="hideShareModal()">Close</button>
+    </div>
   </div>
 </div>
 
@@ -799,8 +879,38 @@ function getShareableUrl() {
 function showCopyPopup() {
   const url = getShareableUrl();
   document.getElementById('share-url-display').textContent = url;
-  const popup = document.getElementById('copy-popup');
-  popup.classList.add('open');
+  document.getElementById('copy-verdict-preview').textContent = '\u201C' + currentResponse + '\u201D';
+  document.getElementById('copy-popup').classList.add('open');
+}
+
+function showShareModal() {
+  document.getElementById('share-modal').classList.add('open');
+}
+
+function hideShareModal() {
+  document.getElementById('share-modal').classList.remove('open');
+}
+
+function shareToX() {
+  const text = encodeURIComponent('Miranda says: \u201C' + currentResponse + '\u201D\n\nGet judged \u2192 mirandaaiapp.com');
+  window.open('https://x.com/intent/post?text=' + text, '_blank');
+  hideShareModal();
+}
+
+function shareToThreads() {
+  const text = encodeURIComponent('Miranda says: \u201C' + currentResponse + '\u201D\n\nGet judged \u2192 mirandaaiapp.com');
+  window.open('https://www.threads.net/intent/post?text=' + text, '_blank');
+  hideShareModal();
+}
+
+async function handleDownload() {
+  const blob = await generateVerdictImage();
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'miranda-verdict.png';
+  a.click();
+  URL.revokeObjectURL(url);
 }
 
 function hideCopyPopup() {
@@ -823,8 +933,23 @@ function copyShareLink() {
   });
 }
 
-function handleShare() {
-  showCopyPopup();
+async function handleShare() {
+  const testFile = new File([''], 't', { type: 'image/png' });
+  const canShareFiles = navigator.canShare && navigator.canShare({ files: [testFile] });
+
+  if (canShareFiles) {
+    // Mobile: native share sheet with card image
+    try {
+      const blob = await generateVerdictImage();
+      const file = new File([blob], 'miranda-verdict.png', { type: 'image/png' });
+      await navigator.share({ files: [file] });
+    } catch (err) {
+      if (err.name !== 'AbortError') showShareModal();
+    }
+  } else {
+    // Desktop: show share modal with X / Threads options
+    showShareModal();
+  }
 }
 
 function wrapText(ctx, text, maxWidth) {
@@ -922,73 +1047,6 @@ async function generateVerdictImage() {
   return new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
 }
 
-async function handleShareSocial(platform) {
-  const btn = document.querySelector('[onclick="handleShareSocial(\'' + platform + '\')"]');
-  if (btn) { btn.style.opacity = '0.4'; btn.style.pointerEvents = 'none'; }
-
-  try {
-    const blob = await generateVerdictImage();
-    const file = new File([blob], 'miranda-verdict.png', { type: 'image/png' });
-    const caption = 'Miranda says: \u201C' + currentResponse + '\u201D\n\nGet judged \u2192 mirandaaiapp.com';
-    const encodedCaption = encodeURIComponent(caption);
-
-    if (platform === 'instagram' || platform === 'tiktok') {
-      // On mobile: Web Share API opens native share sheet → user picks Stories
-      if (navigator.canShare && navigator.canShare({ files: [file] })) {
-        await navigator.share({ files: [file] });
-      } else {
-        // Desktop: download the card image
-        _downloadBlob(blob, 'miranda-verdict.png');
-        showToast('Image saved \u2014 open ' + (platform === 'instagram' ? 'Instagram' : 'TikTok') + ' on your phone to share to Stories');
-      }
-      return;
-    }
-
-    if (platform === 'x' || platform === 'threads') {
-      const intentUrls = {
-        x: 'https://x.com/intent/post?text=' + encodedCaption,
-        threads: 'https://www.threads.net/intent/post?text=' + encodedCaption,
-      };
-      if (navigator.canShare && navigator.canShare({ files: [file] })) {
-        await navigator.share({ files: [file], text: caption });
-      } else {
-        window.open(intentUrls[platform], '_blank');
-        _downloadBlob(blob, 'miranda-verdict.png');
-      }
-    }
-  } catch (err) {
-    if (err.name !== 'AbortError') console.error('Share failed:', err);
-  } finally {
-    if (btn) { btn.style.opacity = ''; btn.style.pointerEvents = ''; }
-  }
-}
-
-function _downloadBlob(blob, filename) {
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = filename;
-  a.click();
-  URL.revokeObjectURL(url);
-}
-
-function showToast(msg) {
-  const existing = document.getElementById('share-toast');
-  if (existing) existing.remove();
-  const toast = document.createElement('div');
-  toast.id = 'share-toast';
-  toast.style.cssText = [
-    'position:fixed', 'bottom:32px', 'left:50%', 'transform:translateX(-50%)',
-    'background:#1A1A1A', 'color:#F5F2EE',
-    'font-family:"DM Mono",monospace', 'font-size:11px', 'letter-spacing:0.06em',
-    'padding:12px 20px', 'border-radius:3px',
-    'white-space:nowrap', 'z-index:300',
-    'animation:fadeUp 0.25s ease both',
-  ].join(';');
-  toast.textContent = msg;
-  document.body.appendChild(toast);
-  setTimeout(() => toast.remove(), 4000);
-}
 
 function handleReset() {
   document.getElementById('verdict-card').classList.remove('revealed');
@@ -1001,18 +1059,6 @@ function handleReset() {
     showScreen('input');
   }, 300);
 }
-
-// Hide Instagram/TikTok buttons if file sharing isn't supported (desktop)
-(function () {
-  const testFile = new File([''], 't', { type: 'image/png' });
-  const canShare = navigator.canShare && navigator.canShare({ files: [testFile] });
-  if (!canShare) {
-    ['btn-instagram', 'btn-tiktok'].forEach(id => {
-      const el = document.getElementById(id);
-      if (el) el.style.display = 'none';
-    });
-  }
-})();
 
 // Load shared verdict from URL param
 (function () {
