@@ -648,27 +648,41 @@
 <div id="screen-loading" class="screen">
   <div style="text-align:center;animation:fadeUp 0.3s ease both;display:flex;flex-direction:column;align-items:center;gap:28px">
     <!-- Animated glasses -->
-    <svg class="loading-glasses" width="220" height="130" viewBox="0 0 220 130">
-      <!-- Left eyebrow - small short stroke angled -->
-      <path class="brow-left" d="M42 56 C48 52 56 52 62 54" fill="none" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round"/>
-      <!-- Right eyebrow - small short stroke -->
-      <path class="brow-right" d="M144 54 C150 52 158 52 164 56" fill="none" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round"/>
-      <!-- Left lens - thick top straight/angular, rounded bottom -->
-      <path d="M26 68 L28 64 L84 62 L88 66" fill="none" stroke="#1A1A1A" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
-      <path d="M26 68 C24 78 26 92 34 98 C44 104 68 104 78 98 C86 92 88 78 88 66" fill="none" stroke="#1A1A1A" stroke-width="2"/>
-      <!-- Right lens - thick top straight/angular, rounded bottom -->
-      <path d="M118 66 L122 62 L178 64 L180 68" fill="none" stroke="#1A1A1A" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
-      <path d="M118 66 C116 78 118 92 126 98 C136 104 160 104 170 98 C178 92 180 78 180 68" fill="none" stroke="#1A1A1A" stroke-width="2"/>
+    <svg class="loading-glasses" width="280" height="130" viewBox="0 0 280 130" style="shape-rendering:geometricPrecision">
+      <!-- Left eyebrow -->
+      <path d="M56 22 C68 12 84 12 96 22" fill="none" stroke="#1A1A1A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      <!-- Right eyebrow -->
+      <path d="M184 22 C196 12 212 12 224 22" fill="none" stroke="#1A1A1A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      <!-- Left lens -->
+      <path d="M22 32 C26 26 40 28 56 30 C80 32 104 34 122 38 C128 40 128 46 126 54 C122 72 100 90 70 90 C42 88 24 68 20 50 C18 42 20 36 22 32 Z" fill="none" stroke="#1A1A1A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      <!-- Right lens -->
+      <path d="M258 32 C254 26 240 28 224 30 C200 32 176 34 158 38 C152 40 152 46 154 54 C158 72 180 90 210 90 C238 88 256 68 260 50 C262 42 260 36 258 32 Z" fill="none" stroke="#1A1A1A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
       <!-- Bridge -->
-      <path d="M88 68 C96 62 110 62 118 68" fill="none" stroke="#1A1A1A" stroke-width="2"/>
-      <!-- Left temple -->
-      <path d="M26 68 L14 60" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round" fill="none"/>
-      <!-- Right temple -->
-      <path d="M180 68 L192 60" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round" fill="none"/>
-      <!-- Left eye - almond, subtle -->
-      <path class="eye-left" d="M48 80 C52 75 62 75 66 80 C62 85 52 85 48 80Z" fill="#1A1A1A" stroke="none"/>
-      <!-- Right eye - almond, subtle -->
-      <path class="eye-right" d="M140 80 C144 75 154 75 158 80 C154 85 144 85 140 80Z" fill="#1A1A1A" stroke="none"/>
+      <path d="M126 42 C134 36 146 36 154 42" fill="none" stroke="#1A1A1A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      <!-- Left eye -->
+      <path class="eye-left" d="M54 68 C64 58 88 58 98 68" fill="none" stroke="#1A1A1A" stroke-width="1.5" stroke-linecap="round"/>
+      <line class="eye-left" x1="56" y1="65" x2="52" y2="56" stroke="#1A1A1A" stroke-width="1.2" stroke-linecap="round"/>
+      <line class="eye-left" x1="61" y1="62" x2="58" y2="53" stroke="#1A1A1A" stroke-width="1.2" stroke-linecap="round"/>
+      <line class="eye-left" x1="66" y1="60" x2="64" y2="51" stroke="#1A1A1A" stroke-width="1.2" stroke-linecap="round"/>
+      <line class="eye-left" x1="71" y1="59" x2="70" y2="50" stroke="#1A1A1A" stroke-width="1.2" stroke-linecap="round"/>
+      <line class="eye-left" x1="76" y1="58" x2="76" y2="49" stroke="#1A1A1A" stroke-width="1.2" stroke-linecap="round"/>
+      <line class="eye-left" x1="81" y1="59" x2="82" y2="50" stroke="#1A1A1A" stroke-width="1.2" stroke-linecap="round"/>
+      <line class="eye-left" x1="86" y1="60" x2="88" y2="51" stroke="#1A1A1A" stroke-width="1.2" stroke-linecap="round"/>
+      <line class="eye-left" x1="91" y1="62" x2="94" y2="53" stroke="#1A1A1A" stroke-width="1.2" stroke-linecap="round"/>
+      <line class="eye-left" x1="96" y1="65" x2="100" y2="56" stroke="#1A1A1A" stroke-width="1.2" stroke-linecap="round"/>
+      <circle class="eye-left" cx="76" cy="78" r="5.5" fill="#1A1A1A"/>
+      <!-- Right eye -->
+      <path class="eye-right" d="M182 68 C192 58 216 58 226 68" fill="none" stroke="#1A1A1A" stroke-width="1.5" stroke-linecap="round"/>
+      <line class="eye-right" x1="184" y1="65" x2="180" y2="56" stroke="#1A1A1A" stroke-width="1.2" stroke-linecap="round"/>
+      <line class="eye-right" x1="189" y1="62" x2="186" y2="53" stroke="#1A1A1A" stroke-width="1.2" stroke-linecap="round"/>
+      <line class="eye-right" x1="194" y1="60" x2="192" y2="51" stroke="#1A1A1A" stroke-width="1.2" stroke-linecap="round"/>
+      <line class="eye-right" x1="199" y1="59" x2="198" y2="50" stroke="#1A1A1A" stroke-width="1.2" stroke-linecap="round"/>
+      <line class="eye-right" x1="204" y1="58" x2="204" y2="49" stroke="#1A1A1A" stroke-width="1.2" stroke-linecap="round"/>
+      <line class="eye-right" x1="209" y1="59" x2="210" y2="50" stroke="#1A1A1A" stroke-width="1.2" stroke-linecap="round"/>
+      <line class="eye-right" x1="214" y1="60" x2="216" y2="51" stroke="#1A1A1A" stroke-width="1.2" stroke-linecap="round"/>
+      <line class="eye-right" x1="219" y1="62" x2="222" y2="53" stroke="#1A1A1A" stroke-width="1.2" stroke-linecap="round"/>
+      <line class="eye-right" x1="224" y1="65" x2="228" y2="56" stroke="#1A1A1A" stroke-width="1.2" stroke-linecap="round"/>
+      <circle class="eye-right" cx="204" cy="78" r="5.5" fill="#1A1A1A"/>
     </svg>
     <p style="font-style:italic;font-size:clamp(16px,3.5vw,19px);font-weight:300;color:var(--ink);animation:pulse 2s ease infinite">
       Miranda is considering your choices...
