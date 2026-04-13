@@ -4,6 +4,15 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Miranda</title>
+<meta name="description" content="Submit your outfit. Receive a verdict.">
+<meta property="og:title" content="Miranda">
+<meta property="og:description" content="Submit your outfit. Receive a verdict.">
+<meta property="og:image" content="/og-image.png">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Miranda">
+<meta name="twitter:description" content="Submit your outfit. Receive a verdict.">
+<meta name="twitter:image" content="/og-image.png">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=DM+Mono:wght@300;400;500&family=Herr+Von+Muellerhoff&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -747,7 +756,7 @@
   <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0">
     <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
   </svg>
-  by Sandi
+  by @sandimayux
 </div>
 
 <!-- ========== TOAST ========== -->
@@ -875,16 +884,39 @@ function showScreen(name) {
 function handleImage(input) {
   const file = input.files[0];
   if (!file) return;
-  imageMediaType = file.type || 'image/jpeg';
-  const reader = new FileReader();
-  reader.onload = (e) => {
-    imageBase64 = e.target.result.split(',')[1];
-    document.getElementById('image-preview').src = e.target.result;
+
+  const uploadBtn = document.getElementById('upload-btn');
+  uploadBtn.textContent = 'Loading...';
+  uploadBtn.disabled = true;
+
+  const MAX_PX = 1024;
+  const QUALITY = 0.85;
+
+  const objectUrl = URL.createObjectURL(file);
+  const img = new Image();
+  img.onload = () => {
+    const canvas = document.createElement('canvas');
+    let w = img.naturalWidth, h = img.naturalHeight;
+    if (w > MAX_PX || h > MAX_PX) {
+      if (w >= h) { h = Math.round(h * MAX_PX / w); w = MAX_PX; }
+      else        { w = Math.round(w * MAX_PX / h); h = MAX_PX; }
+    }
+    canvas.width = w; canvas.height = h;
+    canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+    URL.revokeObjectURL(objectUrl);
+
+    const dataUrl = canvas.toDataURL('image/jpeg', QUALITY);
+    imageBase64 = dataUrl.split(',')[1];
+    imageMediaType = 'image/jpeg';
+
+    document.getElementById('image-preview').src = dataUrl;
     document.getElementById('image-preview-container').style.display = 'flex';
-    document.getElementById('upload-btn').style.display = 'none';
+    uploadBtn.style.display = 'none';
+    uploadBtn.textContent = 'Upload photo';
+    uploadBtn.disabled = false;
     document.getElementById('submit-btn').style.display = 'flex';
   };
-  reader.readAsDataURL(file);
+  img.src = objectUrl;
 }
 
 function removeImage() {
