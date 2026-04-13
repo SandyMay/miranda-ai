@@ -576,6 +576,7 @@
     margin-bottom: 10px;
   }
 </style>
+<script defer src="/_vercel/insights/script.js"></script>
 </head>
 <body>
 
@@ -588,11 +589,11 @@
         Miranda
       </h1>
       <p style="font-size:clamp(15px,3.5vw,19px);font-style:italic;font-weight:300;line-height:1.6;max-width:340px;margin:0 auto 20px;color:var(--ink)">
-        Miranda will determine the extent<br>of your outfit&rsquo;s damage<br>
-        <span id="landing-subtitle-alt">Not that you&rsquo;ve done anything to deserve it</span>
+        Miranda will determine the extent<br>of your outfit&rsquo;s damage.<br>
+        <span id="landing-subtitle-alt">Not that you&rsquo;ve done anything to deserve it.</span>
       </p>
       <button class="btn btn-primary landing-btn stagger-2" onclick="showScreen('input')">
-        I'm honored
+        Proceed
       </button>
       <div class="stagger-3 landing-footer" style="margin-top:20px">
         <p class="mono" style="font-size:9px;letter-spacing:0.12em;color:var(--subtle);text-align:center;text-transform:uppercase">
@@ -740,6 +741,15 @@
 </div>
 
 
+<!-- ========== MADE WITH LOVE ========== -->
+<div style="position:fixed;bottom:16px;left:0;right:0;display:flex;align-items:center;justify-content:center;gap:5px;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);pointer-events:none;z-index:10">
+  Made with
+  <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0">
+    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+  </svg>
+  by Sandi
+</div>
+
 <!-- ========== TOAST ========== -->
 <div id="toast" style="position:fixed;bottom:32px;left:50%;transform:translateX(-50%) translateY(12px);background:var(--ink);color:var(--paper);font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;padding:10px 20px;border-radius:var(--r);opacity:0;transition:opacity 0.2s,transform 0.2s;pointer-events:none;white-space:nowrap;z-index:9999">
   Link copied
@@ -840,7 +850,7 @@ const INPUT_SUBTITLES = [
 ];
 
 const LANDING_ALTS = [
-  "Not that you\u2019ve done anything to deserve it",
+  "Not that you\u2019ve done anything to deserve it.",
   "Consider it a gift you didn\u2019t earn",
 ];
 
