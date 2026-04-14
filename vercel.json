@@ -1,5 +1,7 @@
 {
   "rewrites": [
-    { "source": "/api/miranda", "destination": "/api/miranda" }
+    { "source": "/api/miranda", "destination": "/api/miranda" },
+    { "source": "/about", "destination": "/about.html" },
+    { "source": "/privacy", "destination": "/privacy.html" }
   ]
 }
