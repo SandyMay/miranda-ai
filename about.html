@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About — Miranda</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=DM+Mono:wght@300;400;500&family=Mrs+Saint+Delafield&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #F5F2EE;
+    --ink: #1A1A1A;
+    --muted: #A8A4A0;
+    --rule: #DDD9D4;
+    --r: 3px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Cormorant Garamond', serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 32px 28px 60px;
+  }
+
+  .wrap {
+    max-width: 680px;
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  .back {
+    display: inline-block;
+    font-family: 'Mrs Saint Delafield', cursive;
+    font-size: 18px;
+    color: var(--muted);
+    text-decoration: none;
+    margin-bottom: 48px;
+    transition: color 0.2s;
+    line-height: 1;
+  }
+  .back:hover { color: var(--ink); }
+
+  /* ── Hero layout ── */
+  .hero {
+    display: flex;
+    align-items: flex-start;
+    gap: 40px;
+    margin-bottom: 56px;
+  }
+
+  .hero-text {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .name {
+    font-size: clamp(28px, 5vw, 38px);
+    font-weight: 400;
+    font-style: italic;
+    letter-spacing: -0.01em;
+    margin-bottom: 28px;
+  }
+
+  .bio {
+    font-size: 14px;
+    line-height: 1.9;
+    font-weight: 300;
+    color: var(--ink);
+    margin-bottom: 18px;
+  }
+
+  /* ── Photo booth ── */
+  .photo-wrap {
+    flex-shrink: 0;
+    width: 200px;
+    transform: rotate(-2deg);
+    animation: photoDance 6s ease-in-out infinite;
+    transform-origin: center bottom;
+    filter: drop-shadow(0 8px 24px rgba(0,0,0,0.10));
+  }
+
+  @keyframes photoDance {
+    0%   { transform: rotate(-2deg) translateY(0px); }
+    20%  { transform: rotate(-0.8deg) translateY(-7px); }
+    45%  { transform: rotate(-2.8deg) translateY(-3px); }
+    65%  { transform: rotate(-1.2deg) translateY(-9px); }
+    85%  { transform: rotate(-2.5deg) translateY(-2px); }
+    100% { transform: rotate(-2deg) translateY(0px); }
+  }
+
+  .photo-wrap img {
+    width: 100%;
+    border-radius: 2px;
+    display: block;
+  }
+
+  /* ── Links ── */
+  .links {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    margin-top: 48px;
+    flex-wrap: wrap;
+  }
+
+  .link-star {
+    color: var(--muted);
+    font-size: 12px;
+    user-select: none;
+  }
+
+  .link-item {
+    text-decoration: none;
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+
+  .link-item:hover { color: var(--ink); }
+
+  /* ── Footer ── */
+  .footer {
+    margin-top: 64px;
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+  }
+
+  /* ── Mobile ── */
+  @media (max-width: 560px) {
+    .hero { flex-direction: column-reverse; gap: 32px; }
+    .photo-wrap { width: 160px; align-self: flex-end; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <a href="/" class="back">Miranda</a>
+
+  <div class="hero">
+    <div class="hero-text">
+      <h1 class="name">Hi, I'm Sandra.</h1>
+      <p class="bio">I built Miranda AI as an experience for people that love fashion and love the character that this app was inspired by.</p>
+      <p class="bio">I love playing with new tools to create digital products that make people happy.</p>
+      <p class="bio">Previously designed products impacting billions 🌎 at Oracle and Envato — and now building AI products with AI products, lol.</p>
+    </div>
+
+    <div class="photo-wrap">
+      <img src="aboutmeimage.png" alt="Sandra">
+    </div>
+  </div>
+
+  <div class="links">
+    <span class="link-star">✦</span>
+    <a href="https://www.linkedin.com/in/sandramaym/" target="_blank" class="link-item">LinkedIn</a>
+    <span class="link-star">✦</span>
+    <a href="mailto:sandraa.maymm@gmail.com" class="link-item">Email</a>
+    <span class="link-star">✦</span>
+  </div>
+
+  <div class="footer">
+    Made with ♥ by <a href="https://www.linkedin.com/in/sandramaym/" target="_blank" style="color:var(--muted);text-decoration:none;transition:color 0.2s" onmouseover="this.style.color='var(--ink)'" onmouseout="this.style.color='var(--muted)'">sandramaym</a>
+  </div>
+
+</div>
+</body>
+</html>
