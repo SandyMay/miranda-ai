@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Privacy & Terms — Miranda</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=DM+Mono:wght@300;400;500&family=Mrs+Saint+Delafield&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #F5F2EE;
+    --ink: #1A1A1A;
+    --muted: #A8A4A0;
+    --rule: #DDD9D4;
+    --r: 3px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Cormorant Garamond', serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 32px 28px 80px;
+  }
+
+  .wrap {
+    max-width: 600px;
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  .back {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: 'Mrs Saint Delafield', cursive;
+    font-size: 18px;
+    color: var(--muted);
+    text-decoration: none;
+    margin-bottom: 24px;
+    transition: color 0.2s;
+    line-height: 1;
+  }
+
+  .back:hover { color: var(--ink); }
+
+  .page-title {
+    font-size: clamp(26px, 5vw, 36px);
+    font-weight: 400;
+    font-style: italic;
+    letter-spacing: -0.01em;
+    margin-bottom: 6px;
+  }
+
+  .last-updated {
+    font-family: 'DM Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 48px;
+  }
+
+  .divider {
+    width: 40px;
+    height: 1px;
+    background: var(--rule);
+    margin: 44px 0;
+  }
+
+  .section-title {
+    font-size: clamp(18px, 3vw, 22px);
+    font-weight: 400;
+    font-style: italic;
+    margin-bottom: 20px;
+  }
+
+  .block {
+    margin-bottom: 36px;
+  }
+
+  .block-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 0.1em;
+    text-transform: none;
+    color: var(--muted);
+    margin-bottom: 10px;
+  }
+
+  .block p {
+    font-size: 14px;
+    line-height: 1.8;
+    font-weight: 300;
+    color: var(--ink);
+  }
+
+  .block ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  .block ul li {
+    font-size: 14px;
+    line-height: 1.8;
+    font-weight: 300;
+    color: var(--ink);
+    padding-left: 16px;
+    position: relative;
+    margin-bottom: 4px;
+  }
+
+  .block ul li::before {
+    content: '·';
+    position: absolute;
+    left: 0;
+    color: var(--muted);
+    font-weight: 300;
+  }
+
+  a {
+    color: var(--ink);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  a:hover { color: var(--muted); }
+
+  .footer {
+    margin-top: 64px;
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <a href="/" class="back">Miranda</a>
+
+  <h1 class="page-title">Privacy & Terms</h1>
+  <p class="last-updated">Last updated: April 2026</p>
+
+  <!-- ======= PRIVACY ======= -->
+  <h2 class="section-title">Privacy Policy</h2>
+
+  <div class="block">
+    <p>I built Miranda AI as an experience for people that love fashion and love the character that this app was inspired by and I care about being straightforward with you. Here's exactly what happens with your data.</p>
+  </div>
+
+  <div class="block">
+    <p class="block-label">What I collect</p>
+    <ul>
+      <li>Basic usage data through Vercel Analytics: page views, device type, browser, and country. This is aggregate and anonymized — I can't identify you from it.</li>
+      <li>Vercel, my hosting provider, may log standard request metadata (IP address, timestamp, status code) for up to 30 days as part of normal infrastructure operation.</li>
+    </ul>
+  </div>
+
+  <div class="block">
+    <p class="block-label">What I don't collect</p>
+    <ul>
+      <li>No personal profile.</li>
+      <li>No account or login.</li>
+      <li>No cookies beyond what's essential for the app to function.</li>
+      <li>No targeted ads.</li>
+      <li>No selling of data. Ever.</li>
+    </ul>
+  </div>
+
+  <div class="block">
+    <p class="block-label">Your photos</p>
+    <p>This is the important one. When you upload a photo, it is sent directly to Anthropic's API (the AI that powers Miranda's responses) and is not stored anywhere — not by me, not on any server I control. Once you receive your verdict, the photo is gone. I never see it, I never save it, I never have access to it.</p>
+  </div>
+
+  <div class="block">
+    <p class="block-label">Your verdict</p>
+    <p>Verdicts are not stored on any server. When you share a verdict, the text is encoded directly in the URL. Anyone with that link can read it, so only share it if you're comfortable with that.</p>
+  </div>
+
+  <div class="block">
+    <p class="block-label">Third-party services</p>
+    <ul>
+      <li>Anthropic — processes your photo and generates the verdict. Their privacy policy applies to how they handle API requests: <a href="https://www.anthropic.com/privacy" target="_blank">anthropic.com/privacy</a></li>
+      <li>Vercel — hosts the app and the serverless function. Their privacy policy: <a href="https://vercel.com/legal/privacy-policy" target="_blank">vercel.com/legal/privacy-policy</a></li>
+    </ul>
+  </div>
+
+  <div class="block">
+    <p class="block-label">Age</p>
+    <p>Miranda AI is intended for users 13 and older.</p>
+  </div>
+
+  <div class="block">
+    <p class="block-label">Contact</p>
+    <p>Questions? Reach me at <a href="mailto:sandraa.maymm@gmail.com">sandraa.maymm@gmail.com</a></p>
+  </div>
+
+  <div style="text-align:center;margin:44px 0;color:var(--muted);letter-spacing:0.4em;font-size:13px">✦ ✦ ✦</div>
+
+  <!-- ======= TERMS ======= -->
+  <h2 class="section-title">Terms of Service</h2>
+
+  <div class="block">
+    <p class="block-label">What this is</p>
+    <p>Miranda AI is a satirical entertainment tool powered by AI. It is not professional fashion advice. The character and persona used in this app are fictional and satirical in nature. This project is not affiliated with, endorsed by, or connected to any film, studio, or rights holder.</p>
+  </div>
+
+  <div class="block">
+    <p class="block-label">Using it</p>
+    <p>Have fun with it. Don't use it to target or humiliate real people without their consent. Don't try to break it.</p>
+  </div>
+
+  <div class="block">
+    <p class="block-label">Your photos</p>
+    <p>They belong to you. Submitting one gives temporary permission for it to pass through Anthropic's API to generate your verdict — that's the only thing it's used for.</p>
+  </div>
+
+  <div class="block">
+    <p class="block-label">Honesty about what this is</p>
+    <p>This is an independent project built by one person. I keep it running because I care about it. It may have bugs, go down occasionally, or not exist forever.</p>
+  </div>
+
+  <div class="block">
+    <p class="block-label">Changes</p>
+    <p>If anything here changes, the updated version will be posted with a new date.</p>
+  </div>
+
+  <div class="footer">
+    Made with ♥ by <a href="https://www.linkedin.com/in/sandramaym/" target="_blank" style="color:var(--muted);text-decoration:none;transition:color 0.2s" onmouseover="this.style.color='var(--ink)'" onmouseout="this.style.color='var(--muted)'">sandramaym</a>
+  </div>
+
+</div>
+</body>
+</html>
