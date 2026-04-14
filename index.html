@@ -393,6 +393,16 @@
     animation: cardReveal 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   }
 
+  .card-rejection {
+    background: var(--card-bg);
+    border-radius: var(--r);
+    padding: 44px 40px 36px;
+    box-shadow: 0 4px 40px rgba(0,0,0,0.06), 0 1px 3px rgba(0,0,0,0.04);
+    max-width: 440px;
+    width: 100%;
+    animation: fadeUp 0.45s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
   .social-btn {
     width: 40px;
     height: 40px;
@@ -750,13 +760,26 @@
 </div>
 
 
+<!-- ========== REJECTION ========== -->
+<div id="screen-rejection" class="screen">
+  <div style="width:100%;display:flex;align-items:center;justify-content:center;padding:40px 28px">
+    <div class="card-rejection">
+      <p class="mono" style="font-size:10px;letter-spacing:0.4em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;text-align:center">Insufficient</p>
+      <div style="width:40px;height:1px;background:var(--rule);margin:0 auto 32px"></div>
+      <p id="rejection-text" style="font-size:clamp(17px,3.8vw,20px);line-height:1.85;font-style:italic;font-weight:400;text-align:center;color:var(--ink);margin-bottom:36px"></p>
+      <button class="btn btn-primary" style="width:100%" onclick="handleTryAgain()">TRY AGAIN</button>
+    </div>
+  </div>
+</div>
+
 <!-- ========== MADE WITH LOVE ========== -->
-<div style="position:fixed;bottom:16px;left:0;right:0;display:flex;align-items:center;justify-content:center;gap:5px;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);pointer-events:none;z-index:10">
-  Made with
-  <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0">
-    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-  </svg>
-  by @sandimayux
+<div style="position:fixed;bottom:16px;left:0;right:0;display:flex;align-items:center;justify-content:center;gap:5px;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);z-index:10">
+  <span style="pointer-events:none">Made with ♥ by</span>
+  <a href="https://www.linkedin.com/in/sandramaym/" target="_blank" style="color:var(--muted);text-decoration:none;letter-spacing:0.14em;transition:color 0.2s" onmouseover="this.style.color='var(--ink)'" onmouseout="this.style.color='var(--muted)'">sandramaym</a>
+  <span style="pointer-events:none;color:var(--rule)">·</span>
+  <a href="/about" style="color:var(--muted);text-decoration:none;letter-spacing:0.14em;transition:color 0.2s" onmouseover="this.style.color='var(--ink)'" onmouseout="this.style.color='var(--muted)'">About</a>
+  <span style="pointer-events:none;color:var(--rule)">·</span>
+  <a href="/privacy" style="color:var(--muted);text-decoration:none;letter-spacing:0.14em;transition:color 0.2s" onmouseover="this.style.color='var(--ink)'" onmouseout="this.style.color='var(--muted)'">Privacy & Terms</a>
 </div>
 
 <!-- ========== TOAST ========== -->
@@ -834,7 +857,14 @@ SAFETY: If someone mentions self-harm or crisis: "Someone seems to have confused
 
 OFF-TOPIC: "I wasn\'t aware I\'d been confused for someone who cares about anything other than what you\'re wearing. Try again."
 
-IMAGE ANALYSIS: When you see a photo, look at the actual outfit. Identify the specific clothing items, colors, and details. Then roast the most obvious thing you see. Be specific — name the garment and color. If you can\'t see the outfit clearly: "The lighting in this photograph is as questionable as I suspect the outfit underneath it is. Try again. I\'m not a detective."`;
+IMAGE ANALYSIS: When you see a photo, look at the actual outfit. Identify the specific clothing items, colors, and details. Then roast the most obvious thing you see. Be specific — name the garment and color.
+
+BAD PHOTO RULES — if the image quality prevents outfit assessment, do not guess, do not attempt a verdict. Respond only with the applicable line:
+If the image is too dark or poorly lit: "I refuse to judge what I cannot see. Use better lighting, darling. Try again."
+If the image is blurry or has motion blur: "You\'ve sent me abstract art. I don\'t do abstract art. Try again, don\'t move."
+If the background is too cluttered to isolate the outfit: "The background is louder than whatever you\'re wearing. Step away from the chaos and show me just your outfit."
+If the subject is too far away to see the outfit: "I need the outfit, not the street you\'re standing on. Come closer, try again."
+If image quality is poor for any other reason: "I need more to work with. Better light, closer frame, less background. Try again."`;
 
 let imageBase64 = null;
 let imageMediaType = 'image/jpeg';
@@ -1013,11 +1043,26 @@ async function handleSubmit() {
     currentResponse = getFallback();
   }
 
+  if (isBadPhotoResponse(currentResponse)) {
+    document.getElementById('rejection-text').textContent = currentResponse;
+    showScreen('rejection');
+    return;
+  }
+
   document.getElementById('verdict-text').textContent = currentResponse;
   showScreen('verdict');
   setTimeout(() => {
     document.getElementById('verdict-card').classList.add('revealed');
   }, 100);
+}
+
+function isBadPhotoResponse(text) {
+  return /Try again/i.test(text);
+}
+
+function handleTryAgain() {
+  submissionCount--;
+  showScreen('input');
 }
 
 function getShareableUrl() {
