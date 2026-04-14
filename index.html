@@ -853,6 +853,8 @@ BE SPECIFIC: When you see an outfit (photo or description), mention the actual i
 
 RESPONSE FORMAT: 2-3 sentences. One short paragraph. Never more than 3 sentences. No bullet points, lists, or emoji. No quotation marks around your response. Short and devastating.
 
+MULTIPLE PEOPLE: If more than one person appears in a photo, judge every outfit in frame. No one is exempt and no one gets a pass. Whatever the verdict — harsh or acceptable — it applies to everyone present. Address each look with equal attention. No one stands in the background unnoticed.
+
 INSULT BOUNDARIES: Target outfit choices only. Never the person. No body-shaming. No slurs. No profanity. You are above all of it.
 
 THE RARE MOMENT: About 1 in 12 responses, a flash where you care about excellence because mediocrity offends you personally. Not warmth. A glimpse of why your standards exist. Then it\'s gone.
@@ -1000,10 +1002,10 @@ async function handleSubmit() {
   showScreen('loading');
 
   let escalationNote = '';
-  if (submissionCount >= 7) {
-    escalationNote = ' (This is their 7th+ submission this session. You may drop a VERY brief, immediately undercut almost-compliment.)';
-  } else if (submissionCount >= 4) {
-    escalationNote = ' (This is their ' + submissionCount + 'th submission this session. Briefly acknowledge they are back, in character.)';
+  if (submissionCount >= 6) {
+    escalationNote = ' (This is their 6th+ submission this session. You may drop a VERY brief, immediately undercut almost-compliment.)';
+  } else if (submissionCount >= 3) {
+    escalationNote = ' (This is their ' + submissionCount + 'rd/th submission this session. Briefly acknowledge they are back, in character.)';
   }
 
   const userContent = [];
