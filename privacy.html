@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Privacy & Terms — Miranda</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=DM+Mono:wght@300;400;500&family=Mrs+Saint+Delafield&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=GFS+Didot&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=DM+Mono:wght@300;400;500&family=Mrs+Saint+Delafield&display=swap" rel="stylesheet">
 <style>
   :root {
     --paper: #F5F2EE;
@@ -51,7 +51,7 @@
   .page-title {
     font-size: clamp(26px, 5vw, 36px);
     font-weight: 400;
-    font-style: italic;
+    font-style: normal;
     letter-spacing: -0.01em;
     margin-bottom: 6px;
   }
@@ -73,9 +73,9 @@
   }
 
   .section-title {
-    font-size: clamp(18px, 3vw, 22px);
-    font-weight: 400;
-    font-style: italic;
+    font-size: clamp(22px, 4vw, 28px);
+    font-weight: 600;
+    font-style: normal;
     margin-bottom: 20px;
   }
 
@@ -83,19 +83,21 @@
     margin-bottom: 36px;
   }
 
-  .block-label {
-    font-family: 'DM Mono', monospace;
-    font-size: 8px;
-    letter-spacing: 0.1em;
-    text-transform: none;
-    color: var(--muted);
+  .block-label,
+  p.block-label {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(18px, 3vw, 22px);
+    font-weight: 600 !important;
+    font-style: normal;
+    color: var(--ink);
     margin-bottom: 10px;
   }
 
   .block p {
-    font-size: 14px;
-    line-height: 1.8;
-    font-weight: 300;
+    font-size: 20px;
+    line-height: 1.6;
+    font-weight: 400;
+    font-style: normal;
     color: var(--ink);
   }
 
@@ -105,9 +107,10 @@
   }
 
   .block ul li {
-    font-size: 14px;
-    line-height: 1.8;
-    font-weight: 300;
+    font-size: 20px;
+    line-height: 1.6;
+    font-weight: 400;
+    font-style: normal;
     color: var(--ink);
     padding-left: 16px;
     position: relative;
