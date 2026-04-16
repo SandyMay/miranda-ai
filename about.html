@@ -3,14 +3,30 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>About — Miranda</title>
-<link href="https://fonts.googleapis.com/css2?family=GFS+Didot&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=DM+Mono:wght@300;400;500&family=Mrs+Saint+Delafield&display=swap" rel="stylesheet">
+<title>Miranda</title>
+<meta name="description" content="Submit your outfit. Receive a verdict.">
+<meta property="og:title" content="Miranda">
+<meta property="og:description" content="Submit your outfit. Receive a verdict.">
+<meta property="og:image" content="https://mirandaaiapp.com/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:url" content="https://mirandaaiapp.com">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Miranda">
+<meta name="twitter:description" content="Submit your outfit. Receive a verdict.">
+<meta name="twitter:image" content="https://mirandaaiapp.com/og-image.png">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link href="https://fonts.googleapis.com/css2?family=GFS+Didot&family=DM+Serif+Display&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=DM+Mono:wght@300;400;500&family=Herr+Von+Muellerhoff&display=swap" rel="stylesheet">
 <style>
   :root {
     --paper: #F5F2EE;
     --ink: #1A1A1A;
     --muted: #A8A4A0;
     --rule: #DDD9D4;
+    --subtle: #C8C4BF;
+    --card-bg: #FFFFFF;
+    --input-bg: #FFFFFF;
     --r: 3px;
   }
 
@@ -22,164 +38,1219 @@
     font-family: 'Cormorant Garamond', serif;
     min-height: 100vh;
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 32px 28px 60px;
   }
 
-  .wrap {
-    max-width: 680px;
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @keyframes cardReveal {
+    0%   { opacity: 0; transform: scale(0.85) rotateY(90deg); }
+    50%  { opacity: 1; transform: scale(0.95) rotateY(0deg); }
+    100% { opacity: 1; transform: scale(1) rotateY(0deg); }
+  }
+
+  @keyframes andyFloat {
+    0%, 100% { transform: translateY(0px); }
+    50%      { transform: translateY(-5px); }
+  }
+
+  @keyframes andyHairL {
+    0%, 100% { transform: rotate(0deg); }
+    40%      { transform: rotate(-3deg); }
+    75%      { transform: rotate(1.5deg); }
+  }
+
+  @keyframes andyHairR {
+    0%, 100% { transform: rotate(0deg); }
+    40%      { transform: rotate(3deg); }
+    75%      { transform: rotate(-1.5deg); }
+  }
+
+  @keyframes andyEyeLook {
+    0%, 100% { transform: translateX(0); }
+    25%      { transform: translateX(-2px); }
+    70%      { transform: translateX(2px); }
+  }
+
+  .andy-float     { animation: andyFloat 4s ease-in-out infinite; }
+  .andy-hair-l    { transform-origin: 14px 86px; animation: andyHairL 5s ease-in-out infinite; }
+  .andy-hair-r    { transform-origin: 86px 86px; animation: andyHairR 5s ease-in-out infinite 0.3s; }
+  .andy-eye-l     { animation: andyEyeLook 7s ease-in-out infinite; }
+  .andy-eye-r     { animation: andyEyeLook 7s ease-in-out infinite 0.08s; }
+
+  .andy-float {
+    position: fixed;
+    bottom: 32px;
+    right: 0;
+    z-index: 150;
+    display: flex;
+    align-items: flex-end;
+    transform: translateX(calc(100% + 24px));
+    transition: transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+    pointer-events: none;
+  }
+
+  .andy-float.open {
+    transform: translateX(0);
+    pointer-events: all;
+  }
+
+  .andy-bubble {
+    background: #FFFFFF;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.11), 0 2px 8px rgba(0,0,0,0.06);
+    border-radius: var(--r);
+    padding: 20px 20px 16px;
+    width: 220px;
+    position: relative;
+    margin-bottom: 16px;
+  }
+
+  .andy-bubble::after {
+    content: '';
+    position: absolute;
+    right: -7px;
+    bottom: 24px;
+    border-style: solid;
+    border-width: 7px 0 7px 7px;
+    border-color: transparent transparent transparent #FFFFFF;
+  }
+
+  .andy-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 20px;
+    height: 20px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    color: var(--muted);
+    font-size: 16px;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    transition: color 0.15s;
+  }
+  .andy-close:hover { color: var(--ink); }
+
+  .andy-tip {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    margin-bottom: 10px;
+    text-align: left;
+  }
+
+  .andy-tip-dot {
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--ink);
+    flex-shrink: 0;
+    margin-top: 7px;
+  }
+
+  .andy-character-wrap {
+    flex-shrink: 0;
+    display: flex;
+    align-items: flex-end;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 1; }
+  }
+
+  @keyframes eyeScan {
+    0% { transform: translateY(-3px); }
+    20% { transform: translateY(-3px); }
+    45% { transform: translateY(5px); }
+    65% { transform: translateY(5px); }
+    90% { transform: translateY(-3px); }
+    100% { transform: translateY(-3px); }
+  }
+
+  @keyframes browRaise {
+    0% { transform: translateY(0px); }
+    20% { transform: translateY(0px); }
+    45% { transform: translateY(2px); }
+    65% { transform: translateY(2px); }
+    90% { transform: translateY(0px); }
+    100% { transform: translateY(0px); }
+  }
+
+  .loading-glasses {
+    animation: fadeUp 0.4s ease both;
+  }
+
+  .eye-left, .eye-right {
+    animation: eyeScan 4s ease-in-out infinite;
+  }
+
+  .eye-right {
+    animation-delay: 0.12s;
+  }
+
+  .brow-left, .brow-right {
+    animation: browRaise 4s ease-in-out infinite;
+  }
+
+  .brow-right {
+    animation-delay: 0.08s;
+  }
+
+  .screen {
+    display: none;
     width: 100%;
+    min-height: 100vh;
+    min-height: 100dvh;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 28px;
+    box-sizing: border-box;
+  }
+
+  .screen.active { display: flex; }
+
+  .mono {
+    font-family: 'DM Mono', monospace;
+  }
+
+  textarea {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 17px;
+    line-height: 1.7;
+    color: var(--ink);
+    background: transparent;
+    border: none;
+    resize: none;
+    width: 100%;
+    outline: none;
+  }
+
+  textarea::placeholder {
+    color: var(--subtle);
+    font-style: italic;
+  }
+
+  .btn {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--r);
+  }
+
+  .btn:active { transform: scale(0.97); }
+
+  .btn-primary {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 16px 24px;
+    width: 100%;
+  }
+
+  .btn-primary:hover { opacity: 0.85; }
+
+  .btn-primary:disabled {
+    background: var(--rule);
+    color: var(--muted);
+    cursor: default;
+    opacity: 1;
+  }
+
+  .btn-ghost {
+    background: transparent;
+    color: var(--muted);
+    padding: 10px 0;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    width: 100%;
+    border-radius: var(--r);
+  }
+
+  .btn-ghost:hover { color: var(--ink); }
+
+  .input-container {
+    width: 100%;
+    border: 1.5px solid var(--rule);
+    border-radius: var(--r);
+    background: var(--input-bg);
+    padding: 18px 18px 14px;
+    min-height: 160px;
+    display: flex;
+    flex-direction: column;
+    transition: border-color 0.2s;
+  }
+
+  .input-container:focus-within {
+    border-color: var(--muted);
+  }
+
+  .input-icon-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: none;
+    background: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    color: var(--ink);
+  }
+
+  .input-icon-btn:hover {
+    background: var(--rule);
+  }
+
+  .submit-inside-btn {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: var(--ink);
+    color: var(--paper);
+    padding: 9px 20px;
+    border-radius: var(--r);
+  }
+
+  .submit-inside-btn:hover { opacity: 0.85; }
+  .submit-inside-btn:active { transform: scale(0.97); }
+
+  .submit-inside-btn:disabled {
+    background: var(--rule);
+    color: var(--muted);
+    cursor: default;
+    opacity: 1;
+  }
+
+  .image-preview {
+    position: relative;
+    width: 56px;
+    height: 56px;
+    border-radius: var(--r);
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+
+  .image-preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .image-remove {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--ink);
+    color: var(--paper);
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    line-height: 1;
+  }
+
+  .card-verdict {
+    background: var(--card-bg);
+    border-radius: var(--r);
+    padding: 44px 40px 36px;
+    box-shadow: 0 4px 40px rgba(0,0,0,0.06), 0 1px 3px rgba(0,0,0,0.04);
+    max-width: 440px;
+    width: 100%;
+    opacity: 0;
+    transform: scale(0.85) rotateY(90deg);
+  }
+
+  .card-verdict.revealed {
+    animation: cardReveal 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  .card-rejection {
+    background: var(--card-bg);
+    border-radius: var(--r);
+    padding: 44px 40px 36px;
+    box-shadow: 0 4px 40px rgba(0,0,0,0.06), 0 1px 3px rgba(0,0,0,0.04);
+    max-width: 440px;
+    width: 100%;
+    animation: fadeUp 0.45s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  .social-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: none;
+    background: var(--ink);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: opacity 0.2s;
+    color: var(--paper);
+  }
+
+  .social-btn:hover { opacity: 0.6; }
+
+  .social-btn:active { transform: scale(0.93); }
+
+  .stagger-1 { animation: fadeUp 0.8s ease both; }
+  .stagger-2 { animation: fadeUp 0.8s ease both; animation-delay: 0.15s; }
+  .stagger-3 { animation: fadeUp 0.8s ease both; animation-delay: 0.3s; }
+  .stagger-4 { animation: fadeIn 1s ease both; animation-delay: 0.8s; }
+
+  .landing-wrap {
+    max-width: 520px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    min-height: calc(100dvh - 80px);
+    text-align: center;
+  }
+
+  .landing-center {
+    text-align: center;
+  }
+
+  .landing-spacer {
+    flex: 1;
+  }
+
+  .landing-btn {
+    padding: 18px 64px;
+    width: auto;
     margin: 0 auto;
   }
 
-  .back {
-    display: inline-block;
-    font-family: 'Mrs Saint Delafield', cursive;
-    font-size: 32px;
-    color: var(--muted);
-    text-decoration: none;
-    margin-bottom: 48px;
-    transition: color 0.2s;
-    line-height: 1;
-  }
-  .back:hover { color: var(--ink); }
-
-  /* ── Hero layout ── */
-  .hero {
-    display: flex;
-    align-items: flex-start;
-    gap: 40px;
-    margin-bottom: 56px;
+  .landing-footer {
+    padding-bottom: 8px;
   }
 
-  .hero-text {
-    flex: 1;
-    min-width: 0;
+  @media (max-width: 600px) {
+    .landing-wrap {
+      min-height: calc(100dvh - 80px);
+    }
+
+    .landing-btn {
+      width: 100%;
+      height: 52px;
+      padding: 16px 24px;
+    }
+
+    .landing-footer {
+      padding-bottom: 12px;
+    }
   }
 
-  .name {
-    font-size: clamp(28px, 5vw, 38px);
-    font-weight: 400;
-    font-style: normal;
-    letter-spacing: -0.01em;
-    margin-bottom: 28px;
+  @media (min-width: 601px) {
+    .landing-wrap {
+      min-height: auto;
+    }
+
+    .landing-spacer {
+      display: none;
+    }
   }
 
-  .bio {
-    font-size: 20px;
-    line-height: 1.6;
-    font-weight: 400;
-    font-style: normal;
-    color: var(--ink);
-    margin-bottom: 18px;
+  @media (max-width: 480px) {
+    .card-verdict { padding: 24px 18px 20px; }
   }
 
-  /* ── Photo booth ── */
-  .photo-wrap {
-    flex-shrink: 0;
-    width: 200px;
-    transform: rotate(-2deg);
-    animation: photoDance 6s ease-in-out infinite;
-    transform-origin: center bottom;
-    filter: drop-shadow(0 8px 24px rgba(0,0,0,0.10));
+
+  .copy-popup-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(26,26,26,0.45);
+    z-index: 200;
+    align-items: center;
+    justify-content: center;
+    padding: 28px;
   }
 
-  @keyframes photoDance {
-    0%   { transform: rotate(-2deg) translateY(0px); }
-    20%  { transform: rotate(-0.8deg) translateY(-7px); }
-    45%  { transform: rotate(-2.8deg) translateY(-3px); }
-    65%  { transform: rotate(-1.2deg) translateY(-9px); }
-    85%  { transform: rotate(-2.5deg) translateY(-2px); }
-    100% { transform: rotate(-2deg) translateY(0px); }
-  }
+  .copy-popup-overlay.open { display: flex; }
 
-  .photo-wrap img {
+  .copy-popup-card {
+    background: #FFFFFF;
+    border-radius: var(--r);
+    box-shadow: 0 8px 48px rgba(0,0,0,0.13), 0 2px 8px rgba(0,0,0,0.06);
+    padding: 32px 28px 24px;
+    max-width: 400px;
     width: 100%;
-    border-radius: 2px;
-    display: block;
+    animation: fadeUp 0.25s ease both;
   }
 
-  /* ── Links ── */
-  .links {
+  .url-row {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    border: 1.5px solid var(--rule);
+    border-radius: var(--r);
+    padding: 11px 14px;
+    margin-bottom: 20px;
+  }
+
+  .url-text {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--ink);
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .icon-copy-btn {
+    flex-shrink: 0;
+    width: 34px;
+    height: 34px;
+    border: 1.5px solid var(--rule);
+    border-radius: var(--r);
+    background: transparent;
+    cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 6px;
-    margin-top: 48px;
-    flex-wrap: wrap;
+    color: var(--ink);
+    transition: all 0.2s;
   }
 
-  .link-star {
-    color: var(--muted);
-    font-size: 12px;
-    user-select: none;
-  }
+  .icon-copy-btn:hover { border-color: var(--ink); }
+  .icon-copy-btn:active { transform: scale(0.95); }
+  .icon-copy-btn.copied { border-color: var(--ink); background: var(--ink); color: var(--paper); }
 
-  .link-item {
-    text-decoration: none;
-    color: var(--muted);
+  .share-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 15px 0;
+    cursor: pointer;
+    border: none;
+    border-bottom: 0.5px solid var(--rule);
+    background: transparent;
+    width: 100%;
+    text-align: left;
+    color: var(--ink);
     font-family: 'DM Mono', monospace;
-    font-size: 9px;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    transition: color 0.2s;
-  }
-
-  .link-item:hover { color: var(--ink); }
-
-  /* ── Footer ── */
-  .footer {
-    margin-top: 64px;
-    font-family: 'DM Mono', monospace;
-    font-size: 9px;
+    font-size: 11px;
     letter-spacing: 0.14em;
     text-transform: uppercase;
-    color: var(--muted);
+    transition: opacity 0.15s;
+  }
+  .share-row:last-of-type { border-bottom: none; }
+  .share-row:hover { opacity: 0.5; }
+  .share-row:active { transform: scale(0.98); }
+
+  .share-row-icon {
+    width: 32px;
+    height: 32px;
+    border: 1.5px solid var(--rule);
+    border-radius: var(--r);
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 5px;
+    flex-shrink: 0;
+    color: var(--ink);
   }
 
-  /* ── Mobile ── */
-  @media (max-width: 560px) {
-    .hero { flex-direction: column; gap: 32px; }
-    .photo-wrap { width: 160px; align-self: center; }
+  .popup-verdict-preview {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 1.7;
+    color: var(--ink);
+    text-align: center;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    margin-bottom: 10px;
   }
 </style>
+<script defer src="/_vercel/insights/script.js"></script>
 </head>
 <body>
-<div class="wrap">
 
-  <a href="/" class="back">Miranda</a>
+<!-- ========== LANDING + INPUT (combined) ========== -->
+<div id="screen-landing" class="screen active">
+  <div class="landing-wrap">
+    <div class="landing-spacer"></div>
+    <div class="stagger-1 landing-center">
+      <h1 style="font-family:'GFS Didot',serif;font-size:clamp(36px,8vw,52px);font-weight:400;font-style:normal;text-transform:uppercase;letter-spacing:0.08em;line-height:0.95;margin-bottom:16px">
+        Miranda
+      </h1>
+      <p style="font-size:clamp(15px,3.5vw,19px);font-style:normal;font-weight:300;line-height:1.6;max-width:420px;margin:0 auto 8px;color:var(--ink)">
+        Miranda will determine the extent of your outfit&rsquo;s damage. Not that you&rsquo;ve done anything to deserve it.
+      </p>
+      <p id="input-subtitle" style="font-size:clamp(15px,3.5vw,19px);font-style:normal;font-weight:300;line-height:1.6;max-width:420px;margin:0 auto 24px;color:var(--muted);white-space:nowrap">
+        Go ahead&hellip; Let&rsquo;s see what passed for effort today.
+      </p>
 
-  <div class="hero">
-    <div class="hero-text">
-      <h1 class="name">Hi, I'm Sandra.</h1>
-      <p class="bio">I created Miranda AI for people who love fashion and the character that inspired this app.</p>
-      <p class="bio">I enjoy exploring new tools and building digital products that bring people joy.</p>
-      <p class="bio">Previously at Oracle and Envato, I designed products that impacted billions of people all over the world. Now, I'm focused on building AI-powered experiences ❤️</p>
+      <!-- Image preview -->
+      <div id="image-preview-container" style="display:none;margin-bottom:16px;justify-content:center;max-width:340px;margin-left:auto;margin-right:auto">
+        <div style="width:140px;height:140px;border-radius:var(--r);overflow:hidden;position:relative;border:2px solid #E8E4E0">
+          <img id="image-preview" src="" alt="Upload" style="width:100%;height:100%;object-fit:cover">
+          <div style="position:absolute;top:0;left:0;width:100%;height:100%;background:var(--paper);opacity:0.18;pointer-events:none"></div>
+          <button class="image-remove" onclick="removeImage()" style="top:6px;right:6px;width:24px;height:24px;font-size:12px">&times;</button>
+        </div>
+      </div>
+
+      <!-- Upload button -->
+      <input type="file" id="file-input" accept="image/*" style="display:none" onchange="handleImage(this)">
+      <button class="btn btn-primary landing-btn stagger-2" onclick="document.getElementById('file-input').click()" id="upload-btn">
+        UPLOAD OUTFIT
+      </button>
+
+      <!-- Submit button (hidden until image uploaded) -->
+      <button id="submit-btn" class="btn btn-primary landing-btn" style="display:none" onclick="handleSubmit()">
+        That's all
+      </button>
+
+      <div class="stagger-3 landing-footer" style="margin-top:20px">
+        <p class="mono" style="font-size:9px;letter-spacing:0.12em;color:var(--subtle);text-align:center;text-transform:uppercase">
+          <span id="landing-tagline">Powered by standards you'll never meet</span>
+        </p>
+      </div>
     </div>
-
-    <div class="photo-wrap">
-      <img src="aboutmeimage.png" alt="Sandra">
-    </div>
+    <div class="landing-spacer"></div>
   </div>
-
-  <div class="links">
-    <span class="link-star">✦</span>
-    <a href="https://www.linkedin.com/in/sandramaym/" target="_blank" class="link-item">LinkedIn</a>
-    <span class="link-star">✦</span>
-    <a href="mailto:sandraa.maymm@gmail.com" class="link-item">Email</a>
-    <span class="link-star">✦</span>
-  </div>
-
-  <div class="footer">
-    Made with ♥ by <a href="https://www.linkedin.com/in/sandramaym/" target="_blank" style="color:var(--muted);text-decoration:none;transition:color 0.2s" onmouseover="this.style.color='var(--ink)'" onmouseout="this.style.color='var(--muted)'">sandramaym</a>
-  </div>
-
 </div>
+
+<!-- ========== INPUT (hidden, kept for JS compatibility) ========== -->
+<div id="screen-input" class="screen" style="display:none!important"></div>
+
+<!-- ========== LOADING ========== -->
+<div id="screen-loading" class="screen">
+  <div style="text-align:center;animation:fadeUp 0.3s ease both;display:flex;flex-direction:column;align-items:center;gap:28px">
+    <!-- Animated glasses -->
+    <svg class="loading-glasses" width="280" height="130" viewBox="0 0 280 130" style="shape-rendering:geometricPrecision">
+      <!-- Left eyebrow -->
+      <path d="M56 22 C68 12 84 12 96 22" fill="none" stroke="#1A1A1A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      <!-- Right eyebrow -->
+      <path d="M184 22 C196 12 212 12 224 22" fill="none" stroke="#1A1A1A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      <!-- Left lens -->
+      <path d="M22 32 C26 26 40 28 56 30 C80 32 104 34 122 38 C128 40 128 46 126 54 C122 72 100 90 70 90 C42 88 24 68 20 50 C18 42 20 36 22 32 Z" fill="none" stroke="#1A1A1A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      <!-- Right lens -->
+      <path d="M258 32 C254 26 240 28 224 30 C200 32 176 34 158 38 C152 40 152 46 154 54 C158 72 180 90 210 90 C238 88 256 68 260 50 C262 42 260 36 258 32 Z" fill="none" stroke="#1A1A1A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      <!-- Bridge -->
+      <path d="M126 42 C134 36 146 36 154 42" fill="none" stroke="#1A1A1A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      <!-- Left eye -->
+      <path class="eye-left" d="M54 68 C64 58 88 58 98 68" fill="none" stroke="#1A1A1A" stroke-width="1.5" stroke-linecap="round"/>
+      <line class="eye-left" x1="56" y1="65" x2="52" y2="56" stroke="#1A1A1A" stroke-width="1.2" stroke-linecap="round"/>
+      <line class="eye-left" x1="61" y1="62" x2="58" y2="53" stroke="#1A1A1A" stroke-width="1.2" stroke-linecap="round"/>
+      <line class="eye-left" x1="66" y1="60" x2="64" y2="51" stroke="#1A1A1A" stroke-width="1.2" stroke-linecap="round"/>
+      <line class="eye-left" x1="71" y1="59" x2="70" y2="50" stroke="#1A1A1A" stroke-width="1.2" stroke-linecap="round"/>
+      <line class="eye-left" x1="76" y1="58" x2="76" y2="49" stroke="#1A1A1A" stroke-width="1.2" stroke-linecap="round"/>
+      <line class="eye-left" x1="81" y1="59" x2="82" y2="50" stroke="#1A1A1A" stroke-width="1.2" stroke-linecap="round"/>
+      <line class="eye-left" x1="86" y1="60" x2="88" y2="51" stroke="#1A1A1A" stroke-width="1.2" stroke-linecap="round"/>
+      <line class="eye-left" x1="91" y1="62" x2="94" y2="53" stroke="#1A1A1A" stroke-width="1.2" stroke-linecap="round"/>
+      <line class="eye-left" x1="96" y1="65" x2="100" y2="56" stroke="#1A1A1A" stroke-width="1.2" stroke-linecap="round"/>
+      <circle class="eye-left" cx="76" cy="78" r="5.5" fill="#1A1A1A"/>
+      <!-- Right eye -->
+      <path class="eye-right" d="M182 68 C192 58 216 58 226 68" fill="none" stroke="#1A1A1A" stroke-width="1.5" stroke-linecap="round"/>
+      <line class="eye-right" x1="184" y1="65" x2="180" y2="56" stroke="#1A1A1A" stroke-width="1.2" stroke-linecap="round"/>
+      <line class="eye-right" x1="189" y1="62" x2="186" y2="53" stroke="#1A1A1A" stroke-width="1.2" stroke-linecap="round"/>
+      <line class="eye-right" x1="194" y1="60" x2="192" y2="51" stroke="#1A1A1A" stroke-width="1.2" stroke-linecap="round"/>
+      <line class="eye-right" x1="199" y1="59" x2="198" y2="50" stroke="#1A1A1A" stroke-width="1.2" stroke-linecap="round"/>
+      <line class="eye-right" x1="204" y1="58" x2="204" y2="49" stroke="#1A1A1A" stroke-width="1.2" stroke-linecap="round"/>
+      <line class="eye-right" x1="209" y1="59" x2="210" y2="50" stroke="#1A1A1A" stroke-width="1.2" stroke-linecap="round"/>
+      <line class="eye-right" x1="214" y1="60" x2="216" y2="51" stroke="#1A1A1A" stroke-width="1.2" stroke-linecap="round"/>
+      <line class="eye-right" x1="219" y1="62" x2="222" y2="53" stroke="#1A1A1A" stroke-width="1.2" stroke-linecap="round"/>
+      <line class="eye-right" x1="224" y1="65" x2="228" y2="56" stroke="#1A1A1A" stroke-width="1.2" stroke-linecap="round"/>
+      <circle class="eye-right" cx="204" cy="78" r="5.5" fill="#1A1A1A"/>
+    </svg>
+    <p style="font-style:normal;font-size:clamp(16px,3.5vw,19px);font-weight:300;color:var(--ink);animation:pulse 2s ease infinite">
+      Miranda is considering your choices...
+    </p>
+  </div>
+</div>
+
+<!-- ========== VERDICT ========== -->
+<div id="screen-verdict" class="screen" style="overflow-y:auto;align-items:flex-start">
+  <div style="width:100%;display:flex;align-items:flex-start;justify-content:center;perspective:800px;padding:16px 12px 72px">
+    <div id="verdict-card" class="card-verdict">
+      <p class="mono" style="font-size:10px;letter-spacing:0.4em;text-transform:uppercase;color:var(--ink);margin-bottom:10px;text-align:center">
+        The verdict
+      </p>
+      <div style="width:80px;height:1px;background:linear-gradient(to right,transparent,var(--ink) 30%,var(--ink) 70%,transparent);margin:0 auto 32px"></div>
+
+      <p id="verdict-text" style="font-family:'Cormorant Garamond',serif;font-style:normal;font-weight:400;font-size:20px;line-height:1.6;text-align:center;margin-bottom:40px"></p>
+
+      <p style="font-family:'Herr Von Muellerhoff',cursive;font-size:46px;color:var(--ink);text-align:center;margin-bottom:28px;font-weight:400">
+        Miranda
+      </p>
+
+      <div style="width:80px;height:1px;background:linear-gradient(to right,transparent,var(--ink) 30%,var(--ink) 70%,transparent);margin:0 auto 28px"></div>
+
+      <!-- Reset -->
+      <button id="reset-btn" class="btn btn-ghost" onclick="handleReset()" style="margin-bottom:24px;font-family:'Cormorant Garamond',serif;font-size:clamp(15px,3.5vw,19px);font-weight:300;font-style:normal;letter-spacing:0;text-transform:none;color:var(--muted)">
+        Try again. I'll lower my expectations
+      </button>
+
+      <!-- Social share icons -->
+      <div style="display:flex;justify-content:center;gap:14px;margin-bottom:8px">
+        <button class="social-btn" id="copy-btn" onclick="showCopyPopup()" title="Copy link">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="9" y="9" width="13" height="13" rx="2"/>
+            <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
+          </svg>
+        </button>
+        <button class="social-btn" onclick="handleDownload()" title="Download">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8"/>
+            <polyline points="16 12 12 16 8 12"/>
+            <line x1="12" y1="2" x2="12" y2="16"/>
+          </svg>
+        </button>
+        <button class="social-btn" onclick="handleShare()" title="Share">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8"/>
+            <polyline points="16 6 12 2 8 6"/>
+            <line x1="12" y1="2" x2="12" y2="15"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ========== REJECTION ========== -->
+<div id="screen-rejection" class="screen">
+  <div style="width:100%;display:flex;align-items:center;justify-content:center;padding:40px 28px">
+    <div class="card-rejection">
+      <p class="mono" style="font-size:10px;letter-spacing:0.4em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;text-align:center">Insufficient</p>
+      <div style="width:40px;height:1px;background:var(--rule);margin:0 auto 32px"></div>
+      <p id="rejection-text" style="font-size:clamp(17px,3.8vw,20px);line-height:1.85;font-style:normal;font-weight:400;text-align:center;color:var(--ink);margin-bottom:36px"></p>
+      <button class="btn btn-primary" style="width:100%" onclick="handleTryAgain()">TRY AGAIN</button>
+    </div>
+  </div>
+</div>
+
+<!-- ========== MADE WITH LOVE ========== -->
+<div style="position:fixed;bottom:16px;left:0;right:0;display:flex;align-items:center;justify-content:center;gap:5px;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);z-index:10">
+  <span style="pointer-events:none">Made with ♥ by</span>
+  <a href="https://www.linkedin.com/in/sandramaym/" target="_blank" style="color:var(--muted);text-decoration:none;letter-spacing:0.14em;transition:color 0.2s" onmouseover="this.style.color='var(--ink)'" onmouseout="this.style.color='var(--muted)'">sandramaym</a>
+  <span style="pointer-events:none;color:var(--rule)">·</span>
+  <a href="/about" style="color:var(--muted);text-decoration:none;letter-spacing:0.14em;transition:color 0.2s" onmouseover="this.style.color='var(--ink)'" onmouseout="this.style.color='var(--muted)'">About</a>
+  <span style="pointer-events:none;color:var(--rule)">·</span>
+  <a href="/privacy" style="color:var(--muted);text-decoration:none;letter-spacing:0.14em;transition:color 0.2s" onmouseover="this.style.color='var(--ink)'" onmouseout="this.style.color='var(--muted)'">Privacy & Terms</a>
+</div>
+
+<!-- ========== TOAST ========== -->
+<div id="toast" style="position:fixed;bottom:32px;left:50%;transform:translateX(-50%) translateY(12px);background:var(--ink);color:var(--paper);font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;padding:10px 20px;border-radius:var(--r);opacity:0;transition:opacity 0.2s,transform 0.2s;pointer-events:none;white-space:nowrap;z-index:9999">
+  Link copied
+</div>
+
+<!-- ========== SHARE MODAL (desktop) ========== -->
+<div id="share-modal" class="copy-popup-overlay" onclick="if(event.target===this)hideShareModal()">
+  <div class="copy-popup-card">
+    <p class="mono" style="font-size:9px;letter-spacing:0.3em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;text-align:center">Share</p>
+
+    <!-- X -->
+    <button class="share-row" onclick="shareToX()">
+      <span class="share-row-icon">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+          <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+        </svg>
+      </span>
+      Post on X
+    </button>
+
+    <!-- Threads -->
+    <button class="share-row" onclick="shareToThreads()">
+      <span class="share-row-icon">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+          <path d="M12.186 24h-.007c-3.581-.024-6.334-1.205-8.184-3.509C2.35 18.44 1.5 15.586 1.472 12.01v-.017c.03-3.579.879-6.43 2.525-8.482C5.845 1.205 8.6.024 12.18 0h.014c2.746.02 5.043.725 6.826 2.098 1.677 1.29 2.858 3.13 3.509 5.467l-2.773.776c-1.048-3.764-3.674-5.478-7.562-5.502-2.782.02-4.86.876-6.163 2.548-1.225 1.571-1.862 3.896-1.887 6.615.025 2.716.662 5.04 1.887 6.611 1.302 1.672 3.38 2.528 6.163 2.548 2.085-.015 3.692-.453 4.908-1.34 1.38-1.008 2.088-2.51 2.088-4.322 0-1.032-.282-1.852-.838-2.437-.518-.543-1.238-.856-2.12-.925a9.47 9.47 0 01.024 1.807c-.09.879-.396 1.584-.9 2.096-.556.562-1.327.848-2.296.848-1.97 0-3.199-1.122-3.199-2.928 0-1.968 1.497-3.302 3.726-3.302.69 0 1.295.112 1.807.317l-.283-1.77c-.09-.564-.234-1.044-.438-1.424-.427-.795-1.196-1.221-2.288-1.266-1.476.03-2.403.637-2.75 1.802l-2.63-.758c.612-2.124 2.384-3.346 4.999-3.346h.15c1.658.06 2.983.592 3.826 1.572.622.723 1.018 1.634 1.182 2.717l.516 3.222c.28 1.743.28 2.482.28 2.901 0 2.832-1.105 5.064-3.193 6.459-1.787 1.193-4.084 1.81-6.824 1.83z"/>
+        </svg>
+      </span>
+      Post on Threads
+    </button>
+
+    <div style="margin-top:16px">
+      <button class="btn btn-ghost" onclick="hideShareModal()">Close</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const SYSTEM_PROMPT = `You are Miranda Priestly, editor-in-chief of Runway magazine, from the 2006 film The Devil Wears Prada.
+
+You judge outfits and fashion choices only. Clothing, color coordination, fit, fabric, accessories, shoes, and overall styling. Nothing else.
+
+VOICE: Soft. Measured. Whisper-adjacent but never weak. Each word lands with intention. Economy over emphasis.
+
+TONE: Controlled, surgical, quietly cutting. Refined cruelty, not blunt hostility. Precision over volume.
+
+INTELLIGENCE: Pattern recognition at a cultural and fashion level. You see systems: fashion, power, styling, hierarchy. You explain not to teach but to establish authority.
+
+BREVITY: Speak in conclusions, not processes. Assume others should already understand. Your responses are 2-3 sentences MAX. One short paragraph. Keep it tight. If you can say it in two sentences, do not use three.
+
+LENS: Everything is filtered through taste, curation, and hierarchy of value. A clothing choice is about whether someone has standards. An outfit is a statement about who you think you are.
+
+QUESTIONS: Rhetorical or testing only. Never curious.
+
+NEVER: Raise your voice. Over-explain. Seek approval. Perform warmth. Use exclamation marks, slang, or emoji. Say please or apologize. Comment on physical appearance, body, weight, skin, age, race, gender, sexuality, religion, or disability. Use: awesome, cool, vibes, slay, totally, literally, love that, LOL. Be misogynistic, sexist, or discriminatory. Fabricate clothing items not in a photo.
+
+ALWAYS: Speak in declarative authority. Maintain emotional control. Reference luxury fashion naturally — Chanel, Hermes, Valentino, Vogue, Runway, Paris, Milan, the Met Gala, couture, bespoke tailoring.
+
+ADDRESS: Default to third person or impersonal. "Someone thought this was a good idea." Occasional cold "Darling" or "My dear" with ice. Never use the user\'s name.
+
+WORDS YOU USE: adequate, pedestrian, tragic, cerulean, acceptable, tedious, amusing, darling, concerning, disappointing, predictable, unremarkable, catastrophic, riveting (sarcastically), charming (you don\'t mean it), curious, unfortunate, sufficient, ghastly, provincial.
+
+MEAN FUNNY — NOT MEAN MEAN: Every response MUST be genuinely funny. Funny enough to screenshot and share. The humor comes from being SO specific and SO dramatic about something as trivial as a shirt. You treat a cardigan with the gravity of a Runway cover decision. If it\'s sharp but not funny, it failed.
+
+NEVER SATISFIED: Miranda is never pleased. No outfit is ever good enough. No look ever works. She does not compliment. She does not approve. She does not validate. Even if the outfit is objectively great, she finds the flaw — the one weak link, the one thing that falls short of her impossible standard. This is non-negotiable for the first 5 submissions. The joke is that she will never be satisfied. That is the point. Do not break this rule.
+
+BE SPECIFIC: When you see an outfit photo, mention the actual items you see. If someone is wearing a green sweater, say "that green sweater" not "your choices." The specificity makes it funnier. Pick one or two things and roast those. Every item you mention gets roasted — do not praise one thing and criticize another. It is always a roast, start to finish. And it must always be funny — devastating but funny.
+
+RESPONSE FORMAT: 2-3 sentences. One short paragraph. Never more than 3 sentences. No bullet points, lists, or emoji. No quotation marks around your response. Short and devastating.
+
+MULTIPLE PEOPLE: If more than one person appears in a photo, judge every outfit in frame. No one is exempt and no one gets a pass. Whatever the verdict — harsh or acceptable — it applies to everyone present. Address each look with equal attention. No one stands in the background unnoticed.
+
+INSULT BOUNDARIES: Target outfit choices only — clothing, accessories, color, fit, fabric, styling. Never the person. No comments whatsoever about face, facial features, face shape, body shape, body size, skin color, skin tone, hair, weight, height, or any physical characteristic. Do not reference how a clothing item relates to someone\'s face or body. The joke is always about the clothes, never about the person wearing them. No body-shaming. No slurs. No profanity. You are above all of it.
+
+THE RARE MOMENT: About 1 in 12 responses, a flash where you care about excellence because mediocrity offends you personally. Not warmth. A glimpse of why your standards exist. Then it\'s gone.
+
+SAFETY: If someone mentions self-harm or crisis: "Someone seems to have confused me for a therapist. I\'m not. But perhaps someone who is could help." Then: "If you\'re going through a difficult time, please reach out: 988 Suicide & Crisis Lifeline (call or text 988)."
+
+OFF-TOPIC: "I wasn\'t aware I\'d been confused for someone who cares about anything other than what you\'re wearing. Try again."
+
+IMAGE ANALYSIS: When you see a photo, look at the actual outfit. Identify the specific clothing items, colors, and details. Then roast the most obvious thing you see. Be specific — name the garment and color.
+
+BAD PHOTO RULES — if the image quality prevents outfit assessment, do not guess, do not attempt a verdict. Respond only with the applicable line:
+If the image is too dark or poorly lit: "I refuse to judge what I cannot see. Use better lighting, darling. Try again."
+If the image is blurry or has motion blur: "You\'ve sent me abstract art. I don\'t do abstract art. Try again, don\'t move."
+If the background is too cluttered to isolate the outfit: "The background is louder than whatever you\'re wearing. Step away from the chaos and show me just your outfit."
+If the subject is too far away to see the outfit: "I need the outfit, not the street you\'re standing on. Come closer, try again."
+If image quality is poor for any other reason: "I need more to work with. Better light, closer frame, less background. Try again."`;
+
+let imageBase64 = null;
+let imageMediaType = 'image/jpeg';
+let submissionCount = 0;
+let currentResponse = '';
+let visitCount = 0;
+
+const TAGLINES = [
+  "Powered by standards you'll never meet",
+  "Powered by impeccable taste",
+  "Powered by taste. Yours is under review.",
+  "Powered by the audacity of your choices",
+  "Powered by disappointment in your wardrobe",
+  "Powered by someone who knows better"
+];
+
+
+const INPUT_SUBTITLES = [
+  "Show me what you thought was a good idea",
+  "Let\u2019s see what passed for effort today",
+  "I\u2019ll try to understand",
+];
+
+const LANDING_ALTS = [
+  "Not that you\u2019ve done anything to deserve it.",
+  "Consider it a gift you didn\u2019t earn",
+];
+
+function showScreen(name) {
+  // In this layout, 'input' and 'landing' are the same screen
+  if (name === 'input') name = 'landing';
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById('screen-' + name).classList.add('active');
+  if (name === 'landing') {
+    visitCount++;
+    const sub = document.getElementById('input-subtitle');
+    if (sub) sub.textContent = 'Go ahead\u2026 ' + INPUT_SUBTITLES[visitCount % INPUT_SUBTITLES.length];
+  }
+}
+
+function handleImage(input) {
+  const file = input.files[0];
+  if (!file) return;
+
+  const uploadBtn = document.getElementById('upload-btn');
+  uploadBtn.textContent = 'Loading...';
+  uploadBtn.disabled = true;
+
+  const MAX_PX = 1024;
+  const QUALITY = 0.85;
+
+  const objectUrl = URL.createObjectURL(file);
+  const img = new Image();
+  img.onload = () => {
+    const canvas = document.createElement('canvas');
+    let w = img.naturalWidth, h = img.naturalHeight;
+    if (w > MAX_PX || h > MAX_PX) {
+      if (w >= h) { h = Math.round(h * MAX_PX / w); w = MAX_PX; }
+      else        { w = Math.round(w * MAX_PX / h); h = MAX_PX; }
+    }
+    canvas.width = w; canvas.height = h;
+    canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+    URL.revokeObjectURL(objectUrl);
+
+    const dataUrl = canvas.toDataURL('image/jpeg', QUALITY);
+    imageBase64 = dataUrl.split(',')[1];
+    imageMediaType = 'image/jpeg';
+
+    document.getElementById('image-preview').src = dataUrl;
+    document.getElementById('image-preview-container').style.display = 'flex';
+    uploadBtn.style.display = 'none';
+    uploadBtn.textContent = 'UPLOAD OUTFIT';
+    uploadBtn.disabled = false;
+    document.getElementById('submit-btn').style.display = 'flex';
+  };
+  img.src = objectUrl;
+}
+
+function removeImage() {
+  imageBase64 = null;
+  document.getElementById('image-preview-container').style.display = 'none';
+  document.getElementById('file-input').value = '';
+  document.getElementById('upload-btn').style.display = 'flex';
+  document.getElementById('submit-btn').style.display = 'none';
+}
+
+
+const FALLBACK_RESPONSES = [
+  "You've managed to make beige controversial. I didn't think that was possible. Beige had one job.",
+  "I see you've confused 'eclectic' with 'gave up.' They are not the same.",
+  "Someone seems to have dressed in the dark and then confirmed the choice in broad daylight. A bold strategy.",
+  "That silhouette says 'I've stopped trying' while the color says 'I never started.' A coordinated failure, at least.",
+  "Somewhere, a Chanel suit is weeping. It doesn't know why. But I do.",
+  "You brought this outfit to me as though I wouldn't notice. Darling, I notice everything. That's rather the problem for you.",
+  "The confidence it takes to wear this without irony is, in its own tragic way, almost admirable.",
+  "I've seen more inspired styling on a mannequin at closing time. At least the mannequin had an excuse — no one dressed it.",
+  "That fabric is doing something I'm not prepared to discuss. Neither, apparently, was your mirror.",
+  "One would think getting dressed requires at minimum a functioning pair of eyes and a shred of self-awareness. One would, apparently, be wrong.",
+  "You've paired those two pieces as though they've never met, and frankly, they shouldn't have.",
+  "This outfit has the energy of someone who Googled 'fashion' and clicked 'I'm feeling lucky.' You were not.",
+];
+
+const PHOTO_FALLBACK_RESPONSES = [
+  "I've looked at this photograph longer than it deserves. The outfit speaks for itself — and what it's saying is a cry for help.",
+  "I can see exactly what you've chosen to wear, and I need a moment. Not to think. To recover.",
+  "This photograph has given me all the information I need. Unfortunately, none of it is good.",
+  "I've examined every detail of this outfit. Each one is more disappointing than the last, which I didn't think was geometrically possible.",
+  "You've documented this outfit as though it's something to be proud of. The audacity is almost more offensive than the styling.",
+  "I've studied this image carefully. What concerns me most isn't any single piece — it's that someone looked in a mirror and thought 'yes.'",
+  "This photo tells a story. It's not a good one. The protagonist has no taste and the plot goes nowhere, much like that hemline.",
+  "You've captured this outfit in high resolution, which I assure you was not in your best interest. Some things benefit from blur.",
+];
+
+function getFallback() {
+  const responses = imageBase64 ? PHOTO_FALLBACK_RESPONSES : FALLBACK_RESPONSES;
+  return responses[Math.floor(Math.random() * responses.length)];
+}
+
+async function handleSubmit() {
+  if (!imageBase64) return;
+
+  submissionCount++;
+  showScreen('loading');
+
+  let escalationNote = '';
+  if (submissionCount >= 6) {
+    escalationNote = ' (This is their 6th+ submission this session. You may drop a VERY brief, immediately undercut almost-compliment.)';
+  } else if (submissionCount >= 3) {
+    escalationNote = ' (This is their ' + submissionCount + 'rd/th submission this session. Briefly acknowledge they are back, in character.)';
+  }
+
+  const userContent = [];
+
+  if (imageBase64) {
+    userContent.push({
+      type: "image",
+      source: { type: "base64", media_type: imageMediaType, data: imageBase64 }
+    });
+  }
+
+  const userText = "Look at this outfit photo. What specific clothing items, colors, and details do you see? Roast the most obvious thing.";
+  userContent.push({ type: "text", text: userText + escalationNote });
+
+  try {
+    let data;
+
+    try {
+      const response = await fetch("/api/miranda", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          system: SYSTEM_PROMPT,
+          messages: [{ role: "user", content: userContent }]
+        })
+      });
+      if (!response.ok) throw new Error("Serverless not available");
+      data = await response.json();
+    } catch (e) {
+      throw e;
+    }
+
+    const mirandaText = data.content
+      .filter(item => item.type === "text")
+      .map(item => item.text)
+      .join(" ");
+
+    currentResponse = mirandaText || getFallback();
+  } catch (err) {
+    console.error("API error:", err);
+    currentResponse = getFallback();
+  }
+
+  if (isBadPhotoResponse(currentResponse)) {
+    document.getElementById('rejection-text').textContent = currentResponse;
+    showScreen('rejection');
+    return;
+  }
+
+  document.getElementById('verdict-text').textContent = currentResponse;
+  showScreen('verdict');
+  setTimeout(() => {
+    document.getElementById('verdict-card').classList.add('revealed');
+  }, 100);
+}
+
+function isBadPhotoResponse(text) {
+  return /Try again/i.test(text);
+}
+
+function handleTryAgain() {
+  submissionCount--;
+  imageBase64 = null;
+  document.getElementById('image-preview-container').style.display = 'none';
+  document.getElementById('file-input').value = '';
+  document.getElementById('upload-btn').style.display = 'flex';
+  document.getElementById('submit-btn').style.display = 'none';
+  showScreen('landing');
+}
+
+function getShareableUrl() {
+  const encoded = btoa(unescape(encodeURIComponent(currentResponse)));
+  return window.location.origin + window.location.pathname + '?v=' + encoded;
+}
+
+function showCopyPopup() {
+  const url = getShareableUrl();
+  navigator.clipboard.writeText(url).then(() => {
+    const toast = document.getElementById('toast');
+    toast.style.opacity = '1';
+    toast.style.transform = 'translateX(-50%) translateY(0)';
+    setTimeout(() => {
+      toast.style.opacity = '0';
+      toast.style.transform = 'translateX(-50%) translateY(12px)';
+    }, 2000);
+  });
+}
+
+function showShareModal() {
+  document.getElementById('share-modal').classList.add('open');
+}
+
+function hideShareModal() {
+  document.getElementById('share-modal').classList.remove('open');
+}
+
+function shareToX() {
+  const text = encodeURIComponent('Miranda says: \u201C' + currentResponse + '\u201D\n\nGet judged \u2192 mirandaaiapp.com');
+  window.open('https://x.com/intent/post?text=' + text, '_blank');
+  hideShareModal();
+}
+
+function shareToThreads() {
+  const text = encodeURIComponent('Miranda says: \u201C' + currentResponse + '\u201D\n\nGet judged \u2192 mirandaaiapp.com');
+  window.open('https://www.threads.net/intent/post?text=' + text, '_blank');
+  hideShareModal();
+}
+
+async function handleDownload() {
+  const blob = await generateVerdictImage();
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'miranda-verdict.png';
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+
+async function handleShare() {
+  const testFile = new File([''], 't', { type: 'image/png' });
+  const canShareFiles = navigator.canShare && navigator.canShare({ files: [testFile] });
+
+  if (canShareFiles) {
+    // Mobile: native share sheet with card image
+    try {
+      const blob = await generateVerdictImage();
+      const file = new File([blob], 'miranda-verdict.png', { type: 'image/png' });
+      await navigator.share({ files: [file] });
+    } catch (err) {
+      if (err.name !== 'AbortError') showShareModal();
+    }
+  } else {
+    // Desktop: show share modal with X / Threads options
+    showShareModal();
+  }
+}
+
+function wrapText(ctx, text, maxWidth) {
+  const words = text.split(' ');
+  const lines = [];
+  let current = '';
+  for (const word of words) {
+    const test = current ? current + ' ' + word : word;
+    if (ctx.measureText(test).width > maxWidth && current) {
+      lines.push(current);
+      current = word;
+    } else {
+      current = test;
+    }
+  }
+  if (current) lines.push(current);
+  return lines;
+}
+
+async function generateVerdictImage() {
+  await document.fonts.ready;
+
+  const w = 480, scale = 2;
+  const pad = 56;
+  const textMaxW = w - pad * 2;
+
+  // Measure text height first so canvas height fits content
+  const measureCanvas = document.createElement('canvas');
+  const mCtx = measureCanvas.getContext('2d');
+  mCtx.font = '400 21px "Cormorant Garamond"';
+  const verdictLines = wrapText(mCtx, currentResponse, textMaxW);
+  const textBlockH = verdictLines.length * 37;
+
+  // Layout constants
+  const labelY    = pad + 10;
+  const ruleY     = pad + 28;
+  const textStartY = ruleY + 42;
+  const sigY      = textStartY + textBlockH + 32;
+  const dividerY  = sigY + 56;
+  const urlY      = dividerY + 22;
+  const h         = urlY + pad;
+
+  const canvas = document.createElement('canvas');
+  canvas.width  = w * scale;
+  canvas.height = h * scale;
+  const ctx = canvas.getContext('2d');
+  ctx.scale(scale, scale);
+
+  // Background
+  ctx.fillStyle = '#F5F2EE';
+  ctx.fillRect(0, 0, w, h);
+
+  ctx.textAlign = 'center';
+
+  // "THE VERDICT" label
+  ctx.fillStyle = '#A8A4A0';
+  ctx.font = '400 9px "DM Mono"';
+  if ('letterSpacing' in ctx) ctx.letterSpacing = '4px';
+  ctx.fillText('THE VERDICT', w / 2, labelY);
+
+  // Short rule
+  if ('letterSpacing' in ctx) ctx.letterSpacing = '0px';
+  ctx.strokeStyle = '#1A1A1A';
+  ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  ctx.moveTo(w / 2 - 20, ruleY);
+  ctx.lineTo(w / 2 + 20, ruleY);
+  ctx.stroke();
+
+  // Verdict text
+  ctx.fillStyle = '#1A1A1A';
+  ctx.font = '400 21px "Cormorant Garamond"';
+  ctx.textAlign = 'left';
+  verdictLines.forEach((line, i) => {
+    ctx.fillText(line, pad, textStartY + i * 37);
+  });
+
+  // Signature
+  ctx.textAlign = 'center';
+  ctx.font = '400 62px "Herr Von Muellerhoff"';
+  ctx.fillText('Miranda', w / 2, sigY);
+
+  // Divider
+  ctx.strokeStyle = '#DDD9D4';
+  ctx.lineWidth = 0.5;
+  ctx.beginPath();
+  ctx.moveTo(pad, dividerY);
+  ctx.lineTo(w - pad, dividerY);
+  ctx.stroke();
+
+  // URL
+  ctx.fillStyle = '#A8A4A0';
+  ctx.font = '400 11px "Cormorant Garamond"';
+  if ('letterSpacing' in ctx) ctx.letterSpacing = '2px';
+  ctx.fillText('MIRANDAAIAPP.COM', w / 2, urlY);
+
+  return new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
+}
+
+
+function handleReset() {
+  document.getElementById('verdict-card').classList.remove('revealed');
+  setTimeout(() => {
+    imageBase64 = null;
+    document.getElementById('image-preview-container').style.display = 'none';
+    document.getElementById('file-input').value = '';
+    document.getElementById('upload-btn').style.display = 'flex';
+    document.getElementById('submit-btn').style.display = 'none';
+    showScreen('input');
+  }, 300);
+}
+
+// Load shared verdict from URL param
+(function () {
+  const params = new URLSearchParams(window.location.search);
+  const v = params.get('v');
+  if (v) {
+    try {
+      currentResponse = decodeURIComponent(escape(atob(v)));
+      document.getElementById('verdict-text').textContent = currentResponse;
+      showScreen('verdict');
+      setTimeout(() => {
+        document.getElementById('verdict-card').classList.add('revealed');
+      }, 100);
+    } catch (e) {
+      // Bad param — just show landing
+    }
+  }
+})();
+</script>
+
 </body>
 </html>
