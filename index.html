@@ -630,7 +630,7 @@
       <!-- Upload button -->
       <input type="file" id="file-input" accept="image/*" style="display:none" onchange="handleImage(this)">
       <button class="btn btn-primary landing-btn stagger-2" onclick="document.getElementById('file-input').click()" id="upload-btn">
-        Upload photo
+        UPLOAD OUTFIT
       </button>
 
       <!-- Submit button (hidden until image uploaded) -->
@@ -698,8 +698,8 @@
 </div>
 
 <!-- ========== VERDICT ========== -->
-<div id="screen-verdict" class="screen">
-  <div style="width:100%;display:flex;align-items:center;justify-content:center;perspective:800px;padding:40px 28px">
+<div id="screen-verdict" class="screen" style="overflow-y:auto;align-items:flex-start">
+  <div style="width:100%;display:flex;align-items:flex-start;justify-content:center;perspective:800px;padding:40px 28px 72px">
     <div id="verdict-card" class="card-verdict">
       <p class="mono" style="font-size:10px;letter-spacing:0.4em;text-transform:uppercase;color:var(--ink);margin-bottom:10px;text-align:center">
         The verdict
@@ -927,7 +927,7 @@ function handleImage(input) {
     document.getElementById('image-preview').src = dataUrl;
     document.getElementById('image-preview-container').style.display = 'flex';
     uploadBtn.style.display = 'none';
-    uploadBtn.textContent = 'Upload photo';
+    uploadBtn.textContent = 'UPLOAD OUTFIT';
     uploadBtn.disabled = false;
     document.getElementById('submit-btn').style.display = 'flex';
   };
