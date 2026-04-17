@@ -484,7 +484,7 @@
   }
 
   @media (max-width: 480px) {
-    .card-verdict { padding: 24px 18px 20px; }
+    .card-verdict { padding: 32px 24px 28px; }
   }
 
 
@@ -630,7 +630,7 @@
       <!-- Upload button -->
       <input type="file" id="file-input" accept="image/*" style="display:none" onchange="handleImage(this)">
       <button class="btn btn-primary landing-btn stagger-2" onclick="document.getElementById('file-input').click()" id="upload-btn">
-        UPLOAD OUTFIT
+        Upload photo
       </button>
 
       <!-- Submit button (hidden until image uploaded) -->
@@ -698,8 +698,8 @@
 </div>
 
 <!-- ========== VERDICT ========== -->
-<div id="screen-verdict" class="screen" style="overflow-y:auto;align-items:flex-start">
-  <div style="width:100%;display:flex;align-items:flex-start;justify-content:center;perspective:800px;padding:16px 12px 72px">
+<div id="screen-verdict" class="screen">
+  <div style="width:100%;display:flex;align-items:center;justify-content:center;perspective:800px;padding:40px 28px">
     <div id="verdict-card" class="card-verdict">
       <p class="mono" style="font-size:10px;letter-spacing:0.4em;text-transform:uppercase;color:var(--ink);margin-bottom:10px;text-align:center">
         The verdict
@@ -716,11 +716,18 @@
 
       <!-- Reset -->
       <button id="reset-btn" class="btn btn-ghost" onclick="handleReset()" style="margin-bottom:24px;font-family:'Cormorant Garamond',serif;font-size:clamp(15px,3.5vw,19px);font-weight:300;font-style:normal;letter-spacing:0;text-transform:none;color:var(--muted)">
-        Try again. I'll lower my expectations
+        Try again. i'll lower my expectations
       </button>
 
       <!-- Social share icons -->
       <div style="display:flex;justify-content:center;gap:14px;margin-bottom:8px">
+        <button class="social-btn" onclick="handleShare()" title="Share">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8"/>
+            <polyline points="16 6 12 2 8 6"/>
+            <line x1="12" y1="2" x2="12" y2="15"/>
+          </svg>
+        </button>
         <button class="social-btn" id="copy-btn" onclick="showCopyPopup()" title="Copy link">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <rect x="9" y="9" width="13" height="13" rx="2"/>
@@ -732,13 +739,6 @@
             <path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8"/>
             <polyline points="16 12 12 16 8 12"/>
             <line x1="12" y1="2" x2="12" y2="16"/>
-          </svg>
-        </button>
-        <button class="social-btn" onclick="handleShare()" title="Share">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8"/>
-            <polyline points="16 6 12 2 8 6"/>
-            <line x1="12" y1="2" x2="12" y2="15"/>
           </svg>
         </button>
       </div>
@@ -927,7 +927,7 @@ function handleImage(input) {
     document.getElementById('image-preview').src = dataUrl;
     document.getElementById('image-preview-container').style.display = 'flex';
     uploadBtn.style.display = 'none';
-    uploadBtn.textContent = 'UPLOAD OUTFIT';
+    uploadBtn.textContent = 'Upload photo';
     uploadBtn.disabled = false;
     document.getElementById('submit-btn').style.display = 'flex';
   };
